@@ -5,6 +5,7 @@ import dash_table
 import pandas as pd
 
 from dash.dependencies import Input, Output
+from datetime import datetime as dt
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -35,43 +36,110 @@ app.layout = html.Div([
 #####Here are the different layouts for the different modes
 
 ##Search
-df = pd.read_csv('CITY.csv')
-PAGE_SIZE = 5
+'''
+layout_search = html.Div([
+    dcc.Input(id='loc_id', value='Location', type='text'),
+    dcc.DatePickerSingle(
+        id='start_date',
+        min_date_allowed=dt(1995, 8, 5),
+        max_date_allowed=dt(2020, 9, 19),
+        initial_visible_month=dt(2017, 8, 5),
+        date=str(dt(2019, 8, 25, 23, 59, 59))
+    ),
+    html.Div(id='output_container_search')
+])
 
-layout_search = dash_table.DataTable(
-    id='table-filtering',
-    columns=[
-        {"name": i, "id": i} for i in sorted(df.columns)
-    ],
-    pagination_settings={
-        'current_page': 0,
-        'page_size': PAGE_SIZE
-    },
-    pagination_mode='be',
-
-    filtering='be',
-    filtering_settings=''
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output(component_id='output_container_search', component_property='children'),
+    [
+    #Input(component_id='loc_id', component_property='value'),
+    Input(component_id = 'start_date', component_property = 'date')
+    #Input(component_id = 'end_date', component_property = 'date')
+    ]
 )
+def update_output(start_date):
+    #string_prefix = 'The location is "{}"'.format(loc_id_name)
+    string_prefix = 'You have selected = '
+    if start_date is not None :
+        date = dt.strptime(start_date , '%Y-%m-%d')
+        date_string = date.strftime('%B %d, %Y')
+        return string_prefix + date_string 
+    else : return string_prefix
+
+'''
+ 
+layout_search = html.Div([
+    dcc.DatePickerSingle(
+        id='my-date-picker-single',
+        min_date_allowed=dt(1995, 8, 5),
+        max_date_allowed=dt(2017, 9, 19),
+        initial_visible_month=dt(2017, 8, 5),
+        date=str(dt(2017, 8, 25, 23, 59, 59))
+    ),
+    html.Div(id='output-container-date-picker-single')
+])
+
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    dash.dependencies.Output('output-container-date-picker-single', 'children'),
+    [dash.dependencies.Input('my-date-picker-single', 'date')])
+def update_output(date):
+    string_prefix = 'You have selected: '
+    if date is not None:
+        date = dt.strptime(date, '%Y-%m-%d')
+        date_string = date.strftime('%B %d, %Y')
+        return string_prefix + date_string
+
+################################### SEARCH END
 
 ##predefinied queries
+
+def which_table(value):
+    if(value == 1 ) : 
+        return dash_table.DataTable(
+            id = 'table-queries',
+            columns = [
+                {"Number of values" : 1, "id":1},
+                {"age":2 , "id" :2 }
+            ],
+            pagination_settings={
+                'current_page': 0,
+                'page_size': PAGE_SIZE
+            },
+            pagination_mode='be',
+
+            filtering='be',
+            filtering_settings=''
+        )
+
 layout_predefinied = html.Div([
 	dcc.Dropdown(
+    id = 'question-dropdown',
     options=[
-        {'label': '1', 'value': '1'},
-        {'label': '2', 'value': '2'},
-        {'label': '3', 'value': '3'},
-        {'label': '4', 'value': '4'},
-        {'label': '5', 'value': '5'},
-        {'label': '6', 'value': '6'},
-        {'label': '7', 'value': '7'},
-        {'label': '8', 'value': '8'},
-        {'label': '9', 'value': '9'},
-        {'label': '10', 'value': '10'}
+        {'label': 'Q1', 'value': '1'},
+        {'label': 'Q2', 'value': '2'},
+        {'label': 'Q3', 'value': '3'},
+        {'label': 'Q4', 'value': '4'},
+        {'label': 'Q5', 'value': '5'},
+        {'label': 'Q6', 'value': '6'},
+        {'label': 'Q7', 'value': '7'},
+        {'label': 'Q8', 'value': '8'},
+        {'label': 'Q9', 'value': '9'},
+        {'label': 'Q10', 'value': '10'}
     ],
     value='1'
 	), 
-
+    html.Div(id = 'output-container')
 ])
+
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    dash.dependencies.Output('output-container', 'children'),
+    [dash.dependencies.Input('question-dropdown', 'value')])
+def update_output(value):
+    return 'You have selected "{}"'.format(value)
+
 
 app.config['suppress_callback_exceptions']=True
 @app.callback(
