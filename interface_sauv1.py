@@ -4,9 +4,6 @@ import dash_core_components as dcc
 import dash_table
 import pandas as pd
 import numpy as np
-#import pymysql as _mysql
-#import _mysql
-import cx_Oracle
 
 from dash.dependencies import Input, Output
 from datetime import datetime as dt
@@ -26,19 +23,6 @@ predefinied queries we made
 a review, ...
 '''
 
-
-
-#####Connecting to the database
-
-#db=_mysql.connect(host="cs322-db.epfl.ch",user="C##DB2019_G04",
-#                 passwd="DB2019_G04",db="Airbnb");
-#db.query("""SELECT * FROM BED_TYPE """)
-#r=db.store_result()
-#r.fetch_row()
-
-################ End of connecting to the database
-
-######## Layout for the tabs
 app.layout = html.Div([
     dcc.Tabs(id="tabs", value='tab-1', children=[
         dcc.Tab(label='HOME', value='home'),
@@ -53,6 +37,7 @@ app.layout = html.Div([
 #####Here are the different layouts for the different modes
 
 ##Search
+
 layout_search = html.Div([
     html.Div([
         html.Label('Location'),
@@ -84,16 +69,16 @@ layout_search = html.Div([
         html.Label('Number of beds'),
         dcc.Dropdown(
             options=[
-                {'label': '1 Bed', 'value': '1'},
-                {'label': '2 Beds', 'value': '2'},
-                {'label': '3 Beds', 'value': '3'},
-                {'label': '4 Beds', 'value': '4'},
-                {'label': '5 Beds', 'value': '5'},
-                {'label': '6 Beds', 'value': '6'},
-                {'label': '7 Beds', 'value': '7'},
-                {'label': '8 Beds', 'value': '8'},
-                {'label': '9 Beds', 'value': '9'},
-                {'label': '10 Beds', 'value': '10'}
+                {'label': '1 lit', 'value': '1'},
+                {'label': '2 lits', 'value': '2'},
+                {'label': '3 lits', 'value': '3'},
+                {'label': '4 lits', 'value': '4'},
+                {'label': '5 lits', 'value': '5'},
+                {'label': '6 lits', 'value': '6'},
+                {'label': '7 lits', 'value': '7'},
+                {'label': '8 lits', 'value': '8'},
+                {'label': '9 lits', 'value': '9'},
+                {'label': '10 lits', 'value': '10'}
                 ],
             value='1'
             )] , 
@@ -103,7 +88,7 @@ layout_search = html.Div([
     html.Div([
         html.Label('Price range'),
         dcc.RangeSlider(
-            marks={i: '{} '.format(i) for i in range(500,2000,100)},
+            marks={i: '{} €'.format(i) for i in range(500,2000,100)},
             min=500,
             max=2000,
             value=[1, 15]
@@ -129,26 +114,21 @@ app.config['suppress_callback_exceptions']=True
     Output(component_id='output_container_search', component_property='children'),
     [
     Input(component_id='loc_id', component_property='value'),
-    Input(component_id = 'start_date', component_property = 'date')
+    #Input(component_id = 'start_date', component_property = 'date')
     #Input(component_id = 'end_date', component_property = 'date')
     ]
 )
-def update_output(loc_id_name, date):
+def update_output(loc_id_name):
     string_prefix = 'The location is "{}"'.format(loc_id_name)
-    
-    #return string_prefix
-    if date is not None:
-        string_prefix += ' and you have selected '
-        date = date.split(' ')[0]
-        date = dt.strptime(date, '%Y-%m-%d')
+    '''
+    string_prefix = 'You have selected = '
+    if start_date is not None :
+        date = dt.strptime(start_date , '%Y-%m-%d')
         date_string = date.strftime('%B %d, %Y')
-
-        dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
-        conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
-        c = conn.cursor()
-        c.execute('select * from BED_TYPE')
-        #return html.Div([string_prefix + date_string])
-        return html.Div([c[0]])
+        return string_prefix + date_string 
+    else : return string_prefix
+    '''
+    return string_prefix
 
 '''
 layout_search = html.Div([
