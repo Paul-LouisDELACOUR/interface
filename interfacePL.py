@@ -28,6 +28,7 @@ a review, ...
 
 
 
+
 #####Connecting to the database
 
 #db=_mysql.connect(host="cs322-db.epfl.ch",user="C##DB2019_G04",
@@ -53,76 +54,73 @@ app.layout = html.Div([
 #####Here are the different layouts for the different modes
 
 ##Search
-def layout_searching() : 
-    return html.Div([
-        html.Div([
-            html.Label('Location'),
-            dcc.Input(id='loc_id', value='Location', type='text')],
-            style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
-        ),
+layout_search = html.Div([
+    html.Div([
+        html.Label('Location'),
+        dcc.Input(id='loc_id', value='Location', type='text')],
+        style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
+    ),
 
-        
+    
+    html.Div([
         html.Div([
-            html.Div([
-                html.Label('Start date - end date')
-                ]),
-            dcc.DatePickerRange(
-                id='my-date-picker-range',
-                min_date_allowed=dt(2019, 8, 5),
-                max_date_allowed=dt(2019, 9, 19),
-                initial_visible_month=dt(2019, 8, 5),
-                
-                #end_date=dt(2019, 8, 25)
-            )],
-            style ={'marginLeft': 10, 'marginTop': 10, 'width': '100%'}
+            html.Label('Start date - end date')
+            ]),
+        dcc.DatePickerRange(
+            id='my-date-picker-range',
+            min_date_allowed=dt(2019, 8, 5),
+            max_date_allowed=dt(2019, 9, 19),
+            initial_visible_month=dt(2019, 8, 5),
+            
+            #end_date=dt(2019, 8, 25)
+        )],
+        style ={'marginLeft': 10, 'marginTop': 10, 'width': '100%'}
+    ),
+    
+    html.Div([
+        html.Label('Number of beds'),
+        dcc.Dropdown(
+            options=[
+                {'label': '1 Bed', 'value': '1'},
+                {'label': '2 Beds', 'value': '2'},
+                {'label': '3 Beds', 'value': '3'},
+                {'label': '4 Beds', 'value': '4'},
+                {'label': '5 Beds', 'value': '5'},
+                {'label': '6 Beds', 'value': '6'},
+                {'label': '7 Beds', 'value': '7'},
+                {'label': '8 Beds', 'value': '8'},
+                {'label': '9 Beds', 'value': '9'},
+                {'label': '10 Beds', 'value': '10'}
+                ],
+            value='1'
+            )] , 
+         style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
         ),
-        
-        html.Div([
-            html.Label('Number of beds'),
-            dcc.Dropdown(
-                options=[
-                    {'label': '1 Bed', 'value': '1'},
-                    {'label': '2 Beds', 'value': '2'},
-                    {'label': '3 Beds', 'value': '3'},
-                    {'label': '4 Beds', 'value': '4'},
-                    {'label': '5 Beds', 'value': '5'},
-                    {'label': '6 Beds', 'value': '6'},
-                    {'label': '7 Beds', 'value': '7'},
-                    {'label': '8 Beds', 'value': '8'},
-                    {'label': '9 Beds', 'value': '9'},
-                    {'label': '10 Beds', 'value': '10'}
-                    ],
-                value='1'
-                )] , 
-             style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
-            ),
-        
-        html.Div([
-            html.Label('Daily price range'),
-            dcc.RangeSlider(
-                id='non-linear-range-slider',
-                marks={i: '{} '.format(i) for i in range(0,5001,1000)},
-                min=0,
-                max=5000,
-                value=[50, 200]
-            ) 
-            ],
-            style={'marginLeft': 10, 'marginTop': 10, 'width': '95%'}
-        ),
+    
+    html.Div([
+        html.Label('Daily price range'),
+        dcc.RangeSlider(
+            id='non-linear-range-slider',
+            marks={i: '{} '.format(i) for i in range(0,5001,1000)},
+            min=0,
+            max=5000,
+            value=[50, 200]
+        ) 
+        ],
+        style={'marginLeft': 10, 'marginTop': 10, 'width': '95%'}
+    ),
 
-        html.Div([
-            html.Button('SEARCH FOR YOUR RESERVATION', id='button_reservation')
-            ],
-            style={'marginLeft': 400, 'marginTop': 40, 'width': '100%'}
-        ),
-        
+    html.Div([
+        html.Button('SEARCH FOR YOUR RESERVATION', id='button_reservation')
+        ],
+        style={'marginLeft': 400, 'marginTop': 40, 'width': '100%'}
+    ),
+    
 
-        html.Div(id='output_container_search',
-            style={'marginLeft': 10, 'marginTop': 50, 'width': '80%', 'display': 'inline-block'}
-        )
-    ])
-
-layout_search = layout_searching()
+    html.Div(id='output_container_search',
+        style={'marginLeft': 10, 'marginTop': 50, 'width': '80%', 'display': 'inline-block'}
+    )
+])
 
 app.config['suppress_callback_exceptions']=True
 @app.callback(
@@ -261,8 +259,14 @@ def update_output(value):
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
                 ),
                 html.Div([
-
-                ])
+                    dash_table.DataTable(
+                    id='datatable-q1',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
+                ),
+                
             ])
     elif value == '2' : 
             return html.Div([
@@ -305,7 +309,16 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_2')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
-                )
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q2',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
+                ),
 
             ])
     elif value == '3' :
@@ -330,7 +343,16 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_3')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
-                )
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q3',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
+                ),
 
             ])
     elif value == '4' :
@@ -389,6 +411,15 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_4')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q4',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
                 )
 
             ])
@@ -416,6 +447,15 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_5')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q5',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
                 )
 
             ])
@@ -430,6 +470,15 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_6')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q6',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
                 )
 
             ])
@@ -471,6 +520,15 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_7')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q7',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
                 )
 
             ])
@@ -503,6 +561,15 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_8')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q8',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
                 )
 
             ])
@@ -517,6 +584,15 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_9')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q9',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
                 )
 
             ])
@@ -545,6 +621,15 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_10')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q10',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
                 )
 
             ])
@@ -559,6 +644,15 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_11')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q11',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
                 )
 
             ])
@@ -585,6 +679,15 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_12')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+                ),
+
+                html.Div([
+                    dash_table.DataTable(
+                    id='datatable-q12',
+                    data = [],
+                    columns = []
+                    )],
+                    style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
                 )
 
             ])
@@ -610,6 +713,46 @@ def update_output(search ,q1p1):
 
     return html.Div([string_prefix])
 
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    [Output('datatable-q1', component_property = 'data'), Output('datatable-q1', component_property = 'columns')],
+    [Input('search_1', 'n_clicks')],
+    [State('q1p1', 'value')]
+    )
+def update_output(search ,q1p1):
+    order = 'ASC'
+    if(q1p1 == '2') :
+        order = 'DESC'
+
+    dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
+    conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
+    
+
+    string_prefix = ''' 
+            SELECT CI.city_name, COUNT(*)
+            FROM LISTING LI, NEIGHBORHOOD NE, CITY CI
+            WHERE NOT LI.square_feet IS NULL 
+            AND LI.square_feet > 0
+            AND LI.neighborhood_id = NE.neighborhood_id
+            AND NE.city_id = CI.city_id
+            GROUP BY CI.city_name
+            ORDER BY CI.city_name {}
+        '''.format(order)
+    
+    #return string_prefix
+    c = conn.cursor()
+    c.execute(string_prefix)
+
+    df = pd.DataFrame.from_records(list(c))
+    columns = [
+            {"id": 0, "name": "City_name"},
+            {"id": 1, "name": "Count"},
+            ]
+
+        
+    #return html.Div([string_prefix + date_string])
+    return df.to_dict('records'), columns
+
 
 #############
 
@@ -626,9 +769,9 @@ def uptdapte_output(search,q2p1,q2p2) :
     if(q2p1 == '1'):
         city = 'Madrid'
     elif(q2p1 == '2'):    
-        city = 'barcelona'
+        city = 'Barcelona'
     elif(q2p1 == '3') :
-        city ='berlin'
+        city ='Berlin'
 
     review_scores = 'review_scores_rating'
     if(q2p2 == '1') : review_scores = 'review_scores_rating'
@@ -646,6 +789,70 @@ def uptdapte_output(search,q2p1,q2p2) :
     \n listings in "{}". 
     '''.format(review_scores, city)
     return string_prefix_2
+
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    [Output('datatable-q2', component_property = 'data'), Output('datatable-q2', component_property = 'columns')],
+    [Input('search_2', 'n_clicks')],
+    [State('q2p1', 'value'), State('q2p2', 'value')]
+    )
+def update_output(search ,q2p1, q2p2):
+    city = 'madrid'
+    if(q2p1 == '1'):
+        city = 'madrid'
+    elif(q2p1 == '2'):    
+        city = 'barcelona'
+    elif(q2p1 == '3') :
+        city ='berlin'
+
+    dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
+    conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
+
+    review_scores = 'review_scores_rating'
+    if(q2p2 == '1') : review_scores = 'review_scores_rating'
+    elif(q2p2 == '2') : review_scores = 'review_scores_communication'
+    elif(q2p2 == '3') : review_scores = 'review_scores_value'
+    elif(q2p2 == '4') : review_scores = 'review_scores_checkin'
+    elif(q2p2 == '5') : review_scores = 'review_scores_cleanliness'
+    elif(q2p2 == '6') : review_scores = 'review_scores_accuracy'
+    elif(q2p2 == '7') : review_scores = 'review_scores_location'
+    
+    string_prefix = ''' 
+            SELECT NC.neighborhood_id, NC.neighborhood_name, LI.{0}
+            FROM (SELECT NE.neighborhood_id, NE.neighborhood_name, COUNT(*) as CO
+            FROM LISTING LI, NEIGHBORHOOD NE, CITY CI
+            WHERE LI.neighborhood_id = NE.neighborhood_id 
+            AND NE.city_id = CI.city_id
+            AND CI.city_name = \'{1}\'
+            AND NOT LI.{0} IS NULL
+            GROUP BY NE.neighborhood_id, NE.neighborhood_name) NC, LISTING LI
+            WHERE (LI.neighborhood_id = NC.neighborhood_id AND 
+            LI.listing_id = (SELECT listing_id
+            FROM (SELECT LI.listing_id, row_number() over(order by li.{0}) AS row_number, LI.review_scores_rating
+            FROM LISTING LI
+            WHERE LI.neighborhood_id = NC.neighborhood_id AND NOT LI.{0} IS NULL
+            ORDER BY LI.{0}
+            FETCH FIRST NC.CO/2 ROWS ONLY)
+            ORDER BY REVIEW_SCORES_RATING DESC
+            FETCH FIRST 1 ROW ONLY))
+            ORDER BY LI.{0} DESC
+            FETCH FIRST 5 ROWS ONLY
+        '''.format(review_scores, city)
+    
+    #return string_prefix
+    c = conn.cursor()
+    c.execute(string_prefix)
+
+    df = pd.DataFrame.from_records(list(c))
+    columns = [
+            {"id": 0, "name": "neighborhood_id"},
+            {"id": 1, "name": "neighborhood_name"},
+            {"id": 2, "name": "{}".format(review_scores)}
+            ]
+
+        
+    #return html.Div([string_prefix + date_string])
+    return df.to_dict('records'), columns
 
 ############## Q3
 app.config['suppress_callback_exceptions']=True
@@ -665,6 +872,46 @@ def update_output(search_3 ,q3p1):
         '''.format(order)
 
     return string_prefix_3
+
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    [Output('datatable-q3', component_property = 'data'), Output('datatable-q3', component_property = 'columns')],
+    [Input('search_3', 'n_clicks')],
+    [State('q3p1', 'value')]
+    )
+def update_output(search, q3p1):
+
+    order = 'DESC'
+    if(q3p1 == '1'):
+        order = 'DESC'
+    elif(q3p1 == '2'):    
+        order = 'ASC'
+
+    dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
+    conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
+    
+    string_prefix = ''' 
+            SELECT host_id, host_name, count_each as count
+            FROM (SELECT HO.host_id, HO.host_name, COUNT(*) as count_each, count_max
+            FROM (SELECT COUNT(*) as count_max
+            FROM LISTING LI
+            GROUP BY LI.host_id 
+            ORDER BY COUNT(*) {0} FETCH FIRST 1 ROWS ONLY), LISTING LI, HOST HO
+            WHERE HO.host_id = LI.host_id
+            GROUP BY HO.host_id, HO.host_name, count_max) WHERE count_each = count_max
+        '''.format(order)
+    
+    #return string_prefix
+    c = conn.cursor()
+    c.execute(string_prefix)
+
+    df = pd.DataFrame.from_records(list(c))
+    columns = [
+            {"id": 0, "name": "host_id"},
+            {"id": 1, "name": "host_name"}
+            ]
+
+    return df.to_dict('records'), columns
 
 ############## Q4
 app.config['suppress_callback_exceptions']=True
@@ -712,6 +959,88 @@ def update_output(search_4,q4p1,q4p2,q4p3):
     '''.format(extremum, beds,cancellation )
 
     return string_prefix_4
+
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    [Output('datatable-q4', component_property = 'data'), Output('datatable-q4', component_property = 'columns')],
+    [Input('search_4', 'n_clicks')],
+    [State('q4p1', 'value'),
+    State('q4p2', 'value'),
+    State('q4p3', 'value')]
+    )
+def update_output(search, q4p1, q4p2, q4p3):
+
+    extremum = 'ASC'
+    if(q4p1 == '1') :
+        extremum = 'ASC'
+    elif(q4p1 == '2' ) :
+        extremum = 'DESC'
+    
+    cancellation = 'flexible'
+    if(q4p2 =='1') :
+        cancelation = 'flexible'
+    elif(q4p2 == '2') :
+        cancellation = 'moderate'
+    elif(q4p2 == '3') :   
+        cancellation = 'strict'
+    elif(q4p2 == '4') :   
+        cancellation = 'strict_14_with_grace_period'
+    elif(q4p2 == '5') :   
+        cancellation = 'super_strict_30'
+    elif(q4p2 == '6') : cancellation = 'super_strict_60'
+    
+    beds = '2'
+    if(q4p3 == '2') :
+        beds = '2'
+    elif(q4p3 == '3') :
+        beds = '3'
+    elif(q4p3 == '4') :
+        beds = '4'
+    if(q4p3 == '5') :
+        beds = '5'
+
+    dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
+    conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
+    
+    ''''To do : change this method'''
+    string_prefix = ''' 
+    SELECT DISTINCT LI.listing_id, LI.listing_name
+    FROM (SELECT LI.*
+    FROM LISTING LI, CALENDAR CA, RESERVED_ON RE
+    WHERE LI.listing_id = RE.listing_id
+    AND CA.calendar_id = RE.calendar_id
+    AND RE.available = 't'
+    AND CA.calendar_date >= date '2019-03-01' 
+    AND CA.calendar_date <= date '2019-04-30') LI, CALENDAR CA, RESERVED_ON RE, CANCELLATION_POLICY CP, HOST HO, HOST_VERIFICATIONS HV, VERIFIES VE, CITY CI, NEIGHBORHOOD NE
+    WHERE LI.cancellation_policy_id = CP.cancellation_policy_id 
+    AND CP.cancellation_policy_name = \'{1}\'
+    AND LI.neighborhood_id = NE.neighborhood_id
+    AND NE.city_id = CI.city_id
+    AND CI.city_name = 'berlin'
+    AND LI.review_scores_value >= 8
+    AND LI.beds >= {2}
+    AND LI.host_id = HO.host_id
+    AND VE.host_id = HO.host_id
+    AND HV.host_verifications_id = VE.host_verifications_id
+    AND HV.host_verifications = 'government_id'
+    AND RE.listing_id = LI.listing_id
+    AND CA.calendar_id = RE.calendar_id
+    GROUP BY LI.listing_id, LI.listing_name
+    ORDER BY AVG(RE.price) {0}
+    FETCH FIRST 5 ROWS ONLY
+        '''.format(extremum, cancellation, beds)
+    
+    #return string_prefix
+    c = conn.cursor()
+    c.execute(string_prefix)
+
+    df = pd.DataFrame.from_records(list(c))
+    columns = [
+            {"id": 0, "name": "listing_id"},
+            {"id": 1, "name": "listing_name"}
+            ]
+
+    return df.to_dict('records'), columns
 
 
 ############## Q5
@@ -857,6 +1186,56 @@ def update_output(search):
     '''
     return string_prefix_11
 
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    [Output('datatable-q11', component_property = 'data'), Output('datatable-q11', component_property = 'columns')],
+    [Input('search_11', 'n_clicks')]
+    )
+def update_output(search):
+
+    dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
+    conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
+    
+
+    string_prefix = ''' 
+        SELECT GOOD.country, GOOD.count1 / TOTAL.count2 as RATIO
+        FROM (SELECT CO.country_code, CO.country, COUNT(DISTINCT LI.listing_id) as count1
+        FROM LISTING LI, RESERVED_ON RE, NEIGHBORHOOD NE, CITY CI, COUNTRY CO, CALENDAR CA
+        WHERE LI.listing_id = RE.listing_id 
+        AND LI.neighborhood_id = NE.neighborhood_id
+        AND NE.city_id = CI.city_id
+        AND CO.country_code = CI.country_code 
+        AND RE.available = 't' 
+        AND CA.calendar_id = RE.calendar_id 
+        AND CA.CALENDAR_DATE >= date '2018-01-01' 
+        AND CA.CALENDAR_DATE <= date '2018-12-31'
+        GROUP BY CO.COUNTRY_CODE, CO.COUNTRY) GOOD, 
+        (SELECT CO.country_code, CO.country, COUNT(DISTINCT LI.listing_id) as count2
+        FROM LISTING LI, RESERVED_ON RE, NEIGHBORHOOD NE, CITY CI, COUNTRY CO, CALENDAR CA
+        WHERE LI.listing_id = RE.listing_id 
+        AND LI.neighborhood_id = NE.neighborhood_id
+        AND NE.city_id = CI.city_id
+        AND CO.country_code = CI.country_code 
+        AND CA.calendar_id = RE.calendar_id 
+        AND CA.CALENDAR_DATE >= date '2018-01-01' 
+        AND CA.CALENDAR_DATE <= date '2018-12-31'
+        GROUP BY CO.country_code, CO.COUNTRY) TOTAL
+        WHERE GOOD.country_code = TOTAL.country_code AND count1 > 0.2*count1
+        '''
+    
+    #return string_prefix
+    c = conn.cursor()
+    c.execute(string_prefix)
+
+    df = pd.DataFrame.from_records(list(c))
+    columns = [
+            {"id": 0, "name": "country"},
+            {"id": 1, "name": "ratio"},
+            ]
+        
+    #return html.Div([string_prefix + date_string])
+    return df.to_dict('records'), columns
+
 ############### Q12
 app.config['suppress_callback_exceptions']=True
 @app.callback(
@@ -865,7 +1244,7 @@ app.config['suppress_callback_exceptions']=True
     [State('q12p1', 'value')]
     )
 def update_output(search, q12p1):
-    city = 'Madrid'
+    city = 'madrid'
     if(q12p1 == '1'):
         city = 'Madrid'
     elif(q12p1 == '2'):
@@ -873,145 +1252,183 @@ def update_output(search, q12p1):
     elif(q12p1 == '3'):
         city = 'Berlin'
     string_prefix_12  = '''
-    \n Print all the neighborhouds in "{}" where more than 5 percent of their accommodation’s
+    \n Print all the neighborhoods in "{}" where more than 5 percent of their accommodation’s
     \n cancelation policy is strict with grace period.
     '''.format(city)
 
     return string_prefix_12
 
-string_query_4 = '''
-\n Find the 5 most cheapest Apartments (based on average price within the available dates) in Berlin
-\n available for at least one day between 01-03-2019 and 30-04-2019 having at least 2 beds, a location
-\n review score of at least 8, flexible cancellation, and listed by a host with a verifiable government id.
-'''
-string_query_5 = '''
-\n Each property can accommodate different number of people (1 to 16). Find the top-5 rated
-\n (review_score_rating) listings for each distinct category based on number of accommodated guests
-\n with at least two of these facilities: Wifi, Internet, TV, and Free street parking.
-'''
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    [Output('datatable-q12', component_property = 'data'), Output('datatable-q12', component_property = 'columns')],
+    [Input('search_12', 'n_clicks')],
+    [State('q12p1', 'value')]
+    )
+def update_output(search ,q12p1):
+    city = 'madrid'
+    if(q12p1 == '1') :
+        city = 'madrid'
+    elif(q12p1 == '2') :
+        city = 'barcelona'
+    elif(q12p1 == '3') :
+        city = 'berlin'
 
-string_query_6 = '''
-\nWhat are top three busiest listings per host? The more reviews a listing has, the busier the listing is.
-'''
+    dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
+    conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
+    
 
-string_query_7 = '''
-\nWhat are the three most frequently used amenities at each neighborhood in Berlin for the listings with
-\n“Private Room” room type?
-'''
+    string_prefix = ''' 
+        SELECT up.neighborhood_name, up.neighborhood_id, up.count1 / down.count1 as ratio
+FROM (SELECT NE.neighborhood_name, NE.neighborhood_id, COUNT(DISTINCT LI.listing_id) as count1
+FROM CANCELLATION_POLICY CA, LISTING LI, NEIGHBORHOOD NE, CITY CI
+WHERE LI.cancellation_policy_id = CA.cancellation_policy_id AND LI.neighborhood_id = NE.neighborhood_id AND NE.city_id = CI.city_id AND CA.cancellation_policy_name = 'strict_14_with_grace_period' AND CI.city_name = \'{0}\'
+GROUP BY NE.neighborhood_name, NE.neighborhood_id) up,
+(SELECT NE.neighborhood_name, NE.neighborhood_id, COUNT(DISTINCT LI.listing_id) as count1
+FROM LISTING LI, NEIGHBORHOOD NE, CITY CI
+WHERE LI.neighborhood_id = NE.neighborhood_id AND CI.CITY_NAME = \'{0}\'
+GROUP BY NE.neighborhood_name, NE.neighborhood_id) down
+WHERE up.neighborhood_id = down.neighborhood_id AND up.count1 >= 0.05 * down.count1
+        '''.format(city)
+    
+    #return string_prefix
+    c = conn.cursor()
+    c.execute(string_prefix)
 
-string_query_8 = '''
-\n What is the difference in the average communication review score of the host who has the most
-\n diverse way of verifications and of the host who has the least diverse way of verifications. In case of a
-\n multiple number of the most or the least diverse verifying hosts, pick a host one from the most and
-\n one from the least verifying hosts.
-'''
-string_query_9 = '''
-\n What is the city who has the highest number of reviews for the room types whose average number of
-\n accommodates are greater than 3.
-'''
+    df = pd.DataFrame.from_records(list(c))
+    columns = [
+            {"id": 0, "name": "neighborhood_name"},
+            {"id": 1, "name": "neighborhood_id"},
+            {"id": 2, "name": "ratio"},
+            ]
 
-string_query_10 = '''
-\n Print all the neighborhoods in Madrid which have at least 50 percent of their listings occupied in year
-\n 2019 and their host has joined airbnb before 01.06.2017
-'''
+        
+    #return html.Div([string_prefix + date_string])
+    return df.to_dict('records'), columns
 
-##0 param
-string_query_11 = '''
-\n Print all the countries that in 2018 had at least 20"%"" of their listings available.
-'''
-
-# 1 param city
-string_query_12 = '''
-\n Print all the neighborhouds in Barcelona where more than 5 percent of their accommodation’s
-\n cancelation policy is strict with grace period.
-'''
 ####################### End of predefinied queries
 
 
 
 
 #################### Layout insert
-layout_insert= html.Div([
-    html.Div( [
-        html.Label('Type of insertion'),
-            dcc.Dropdown(
-                id = 'insertion_tab',
-                options=[
-                    {'label': 'Listing', 'value': 'listing'},
-                    {'label': 'Host account creation', 'value': 'host'},
-                    {'label': 'Review of listing', 'value': 'review'}
-                            ],
-                    value='3'
-           )] ,
-            style={'marginLeft': 10, 'marginTop': 5, 'width': '30%', 'display': 'inline-block'}
-    ),
+layout_insert = html.Div([
     
-    html.Div(
-        id='insertion_content',
-        style = {'marginLeft ': 10 , 'marginTop' : 10 , 'width' : '100%', 'display' : 'inline-block'}
-    )
+    html.Div([ 
+        html.Label("Insert"),
+        dcc.Input(
+        id = 'search_insert',
+        placeholder='Enter a value to search',
+        type='text',
+        value=''
+        )],
+        style={'marginLeft': 10, 'marginTop': 10, 'width': '100%', 'display': 'inline-block'}
+    ),
+
+    html.Div([
+        dcc.Checklist(
+        id = 'checklist' ,
+        options=[
+            {'label': 'Host', 'value': 'host'},
+            {'label': 'Listing', 'value': 'listing'},
+            {'label': 'Neighborhood', 'value': 'neighborhood'},
+            {'label': 'Amenity equipment', 'value': 'amenity'},
+            {'label': 'Bed type', 'value': 'bed_type'},
+            {'label': 'Calendar', 'value': 'calendar'},
+            {'label': 'Cancellation policy', 'value': 'cancellation'},
+            {'label': 'City', 'value': 'city'},
+            {'label': 'Country', 'value': 'country'},
+            {'label': 'Host Verifications', 'value': 'host_verifications'},
+            {'label': 'Equipement', 'value': 'is_equiped_with'},
+            {'label': 'Property type', 'value': 'property_type'},
+            {'label': 'Reservation', 'value': 'reserved_on'},
+            {'label': 'Response Time', 'value': 'response_time'},
+            {'label': 'Reviewer', 'value': 'reviewer'},
+            {'label': 'Reviews', 'value': 'reviews'},
+            {'label': 'Room type', 'value': 'room_type'},
+            {'label': 'Verifies', 'value': 'verifies'},
+        ],
+        values=['host', 'listing' , 'neighborhood', 'amenity', 'bed_type',
+            'calendar', 'cancellation', 'city', 'country', 'host_verifications',
+            'is_equiped_with', 'property_type', 'reserved_on' , 'response_time',
+            'reviewer', 'reviews', 'room_type', 'verifies'],
+        labelStyle={'display': 'inline-block'}
+        )],
+        style={'marginLeft': 30, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
+    ),
+
+
+    html.Div([
+        html.Button('SEARCH in the database', id='button_insert')],
+        style={'marginLeft': 200, 'marginTop': 80, 'width': '100%', 'display': 'inline-block'}
+    ),
+    html.Div([
+        dcc.Markdown(id = 'output_container_insert')],
+        style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+    ),    
+
 ])
 
-@app.callback(Output('insertion_content', 'children'),
-    [Input('insertion_tab', 'value')])
-
-def render_content_insert(tab) :
-    if tab == 'listing' :
-        return layout_insert_listing()
-    elif tab == 'host' :
-        return layout_insert_host()
-    elif tab == 'review' :
-        return layout_insert_review()
-
-# Read in the data 
-#df = active_inactive10
-
-# Get a list of all the parties
-#parties = active_inactive10['Party'].unique()
-
-def layout_insert_listing():
-    return html.Div([
-        dcc.Dropdown(
-            id='madrid_neighbothood',
-            options=[
-            {'label': 'acacias', 'value': '1'},
-            {'label': 'adelfas', 'value': '2'},
-            {'label': 'almagro', 'value': '3'},
-            {'label': 'almenara', 'value': '4'},
-            {'label': 'aluche', 'value': '5'},
-            {'label': 'arapiles', 'value': '6'},
-            {'label': 'argaelles', 'value': '7'},
-            {'label': 'arganzurla', 'value': '8'},
-            {'label': 'atocha', 'value': '9'},
-            {'label': 'barajas', 'value': '10'},
-            {'label': 'bellas vistas','value':'11'},
-            {'label': 'bellas vistas','value':'12'},
-            {'label': 'bellas vistas','value':'13'},
-            {'label': 'bellas vistas','value':'14'},
-            {'label': 'bellas vistas','value':'15'},
-            {'label': 'bellas vistas','value':'16'},
-            {'label': 'bellas vistas','value':'17'},
-            {'label': 'bellas vistas','value':'18'},
-            
-            ],
-            multi=True,
-            value='All Parties'),
-        dcc.Graph(id='funnel-graph'),
-    ])
 
 @app.callback(
-    dash.dependencies.Output('funnel-graph', 'figure'),
-    [dash.dependencies.Input('Party', 'value')])
+    Output('output_container_insert' , component_property ='children'),
+    [Input('button_insert','n_clicks')],
+    [State('checklist','values'),
+    State('search_insert', 'value')]
+    )
+
+def render_target_insert(n_clicks,checklist, value) : 
+    string_prefix = 'You typed "{}" '.format(value)
+    string_prefix += ' and you have crossed '
+    if('host' in checklist) :
+        string_prefix += ' Host'
+    if('listing' in checklist) :
+        string_prefix += ' Listing'
+    if('neighborhood' in checklist ) :
+        string_prefix += ' Neighborhood'
+    if('amenity' in checklist) :
+        string_prefix += ' Amenity'
+    if('bed_type' in checklist) :
+        string_prefix += ' bed_type'
+    if('calendar' in checklist) :
+        string_prefix += ' Calendar'
+    if('cancellation' in checklist) :
+        string_prefix += ' Cancellation'
+    if('city' in checklist) :
+        string_prefix += '  City'
+    if('country' in checklist) :
+        string_prefix += '  Country'
+    if('host_verifications' in checklist) :
+        string_prefix += '  Host Verifications'
+    if('is_equiped_with' in checklist) :
+        string_prefix += '  Is Equiped With'
+    if('property_type' in checklist) :
+        string_prefix += '  Property type'
+    if('reserved_on' in checklist) :
+        string_prefix += '  Reserved on'
+    if('response_time' in checklist) :
+        string_prefix += '  Response Time'
+    if('reviewer' in checklist) :
+        string_prefix += '  Reviewer'
+    if('reviews' in checklist) :
+        string_prefix += '  Reviews'
+    if('room_type' in checklist) :
+        string_prefix += '  Room Type'
+    if('verifies' in checklist) :
+        string_prefix += '  Verifies'
 
 
-def layout_insert_host():
-    return html.Div('host')
-
-def layout_insert_review():
-    return html.Div('review')
-
+    string_prefix += '.'
+    return string_prefix
 #####################end Layout Insert 
 
+###################### Layout DELETE
+layout_delete = html.Div([
+    html.Div([
+        html.H3('Tab content delete')
+    ])
+])
+
+#################### End layout DELETE
 
 ######################Tabs callback
 @app.callback(Output('tabs-content', 'children'),
@@ -1031,9 +1448,7 @@ def render_content(tab):
     elif tab == 'insert':
     	return layout_insert
     elif tab == 'delete':
-    	return html.Div([
-            html.H3('Tab content delete')
-        ])
+    	return layout_delete
     
 
 if __name__ == '__main__':

@@ -53,76 +53,73 @@ app.layout = html.Div([
 #####Here are the different layouts for the different modes
 
 ##Search
-def layout_searching() : 
-    return html.Div([
-        html.Div([
-            html.Label('Location'),
-            dcc.Input(id='loc_id', value='Location', type='text')],
-            style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
-        ),
+layout_search = html.Div([
+    html.Div([
+        html.Label('Location'),
+        dcc.Input(id='loc_id', value='Location', type='text')],
+        style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
+    ),
 
-        
+    
+    html.Div([
         html.Div([
-            html.Div([
-                html.Label('Start date - end date')
-                ]),
-            dcc.DatePickerRange(
-                id='my-date-picker-range',
-                min_date_allowed=dt(2019, 8, 5),
-                max_date_allowed=dt(2019, 9, 19),
-                initial_visible_month=dt(2019, 8, 5),
-                
-                #end_date=dt(2019, 8, 25)
-            )],
-            style ={'marginLeft': 10, 'marginTop': 10, 'width': '100%'}
+            html.Label('Start date - end date')
+            ]),
+        dcc.DatePickerRange(
+            id='my-date-picker-range',
+            min_date_allowed=dt(2019, 8, 5),
+            max_date_allowed=dt(2019, 9, 19),
+            initial_visible_month=dt(2019, 8, 5),
+            
+            #end_date=dt(2019, 8, 25)
+        )],
+        style ={'marginLeft': 10, 'marginTop': 10, 'width': '100%'}
+    ),
+    
+    html.Div([
+        html.Label('Number of beds'),
+        dcc.Dropdown(
+            options=[
+                {'label': '1 Bed', 'value': '1'},
+                {'label': '2 Beds', 'value': '2'},
+                {'label': '3 Beds', 'value': '3'},
+                {'label': '4 Beds', 'value': '4'},
+                {'label': '5 Beds', 'value': '5'},
+                {'label': '6 Beds', 'value': '6'},
+                {'label': '7 Beds', 'value': '7'},
+                {'label': '8 Beds', 'value': '8'},
+                {'label': '9 Beds', 'value': '9'},
+                {'label': '10 Beds', 'value': '10'}
+                ],
+            value='1'
+            )] , 
+         style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
         ),
-        
-        html.Div([
-            html.Label('Number of beds'),
-            dcc.Dropdown(
-                options=[
-                    {'label': '1 Bed', 'value': '1'},
-                    {'label': '2 Beds', 'value': '2'},
-                    {'label': '3 Beds', 'value': '3'},
-                    {'label': '4 Beds', 'value': '4'},
-                    {'label': '5 Beds', 'value': '5'},
-                    {'label': '6 Beds', 'value': '6'},
-                    {'label': '7 Beds', 'value': '7'},
-                    {'label': '8 Beds', 'value': '8'},
-                    {'label': '9 Beds', 'value': '9'},
-                    {'label': '10 Beds', 'value': '10'}
-                    ],
-                value='1'
-                )] , 
-             style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
-            ),
-        
-        html.Div([
-            html.Label('Daily price range'),
-            dcc.RangeSlider(
-                id='non-linear-range-slider',
-                marks={i: '{} '.format(i) for i in range(0,5001,1000)},
-                min=0,
-                max=5000,
-                value=[50, 200]
-            ) 
-            ],
-            style={'marginLeft': 10, 'marginTop': 10, 'width': '95%'}
-        ),
+    
+    html.Div([
+        html.Label('Daily price range'),
+        dcc.RangeSlider(
+            id='non-linear-range-slider',
+            marks={i: '{} '.format(i) for i in range(0,5001,1000)},
+            min=0,
+            max=5000,
+            value=[50, 200]
+        ) 
+        ],
+        style={'marginLeft': 10, 'marginTop': 10, 'width': '95%'}
+    ),
 
-        html.Div([
-            html.Button('SEARCH FOR YOUR RESERVATION', id='button_reservation')
-            ],
-            style={'marginLeft': 400, 'marginTop': 40, 'width': '100%'}
-        ),
-        
+    html.Div([
+        html.Button('SEARCH FOR YOUR RESERVATION', id='button_reservation')
+        ],
+        style={'marginLeft': 400, 'marginTop': 40, 'width': '100%'}
+    ),
+    
 
-        html.Div(id='output_container_search',
-            style={'marginLeft': 10, 'marginTop': 50, 'width': '80%', 'display': 'inline-block'}
-        )
-    ])
-
-layout_search = layout_searching()
+    html.Div(id='output_container_search',
+        style={'marginLeft': 10, 'marginTop': 50, 'width': '80%', 'display': 'inline-block'}
+    )
+])
 
 app.config['suppress_callback_exceptions']=True
 @app.callback(
@@ -215,13 +212,11 @@ layout_predefinied = html.Div([
                 {'label': 'Q3', 'value': '3'},
                 {'label': 'Q4', 'value': '4'},
                 {'label': 'Q5', 'value': '5'},
-                {'label': 'Q6', 'value': '6'},  
+                {'label': 'Q6', 'value': '6'},
                 {'label': 'Q7', 'value': '7'},
                 {'label': 'Q8', 'value': '8'},
                 {'label': 'Q9', 'value': '9'},
-                {'label': 'Q10', 'value': '10'},
-                {'label': 'Q11', 'value': '11'},
-                {'label': 'Q12', 'value': '12'}
+                {'label': 'Q10', 'value': '10'}
             ],
             value='1'
         )
@@ -233,16 +228,23 @@ layout_predefinied = html.Div([
         )
 ])
 
+dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
+conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
+
 app.config['suppress_callback_exceptions']=True
 @app.callback(
     dash.dependencies.Output('output-container', 'children'),
     [dash.dependencies.Input('question-dropdown', 'value')])
 
+
+
 def update_output(value):
     if value == '1'  :
         return html.Div([
-                html.Div(id='output_container_query_1',
-                    style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+                dash_table.DataTable(
+                    id='datatable-q1',
+                    data = [],
+                    columns = []
                 ),
                 html.Div( [
                     html.Label('Order'),
@@ -259,10 +261,7 @@ def update_output(value):
                 html.Div([
                     html.Button('SEARCH', id='search_1')],
                     style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
-                ),
-                html.Div([
-
-                ])
+                )
             ])
     elif value == '2' : 
             return html.Div([
@@ -357,7 +356,7 @@ def update_output(value):
                 html.Div( [
                     html.Label('Type of cancellation'),
                     dcc.Dropdown(
-                        id = 'q4p2',
+                        id = 'q3p1',
                         options=[
                             {'label': 'Flexible', 'value': '1'},
                             {'label': 'Moderate', 'value': '2'},
@@ -374,7 +373,7 @@ def update_output(value):
                 html.Div( [
                     html.Label('Min number of beds'),
                     dcc.Dropdown(
-                        id = 'q4p3',
+                        id = 'q3p1',
                         options=[
                             {'label': '2', 'value': '2'},
                             {'label': '3', 'value': '3'},
@@ -393,25 +392,12 @@ def update_output(value):
 
             ])
     elif value == '5' :
-            #### 1 param
+            #### 0 param
             return html.Div([
                 html.Div([
                     dcc.Markdown(id = 'output_container_query_5')],
                     style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
                 ),
-
-                html.Div( [
-                    html.Label('Order'),
-                    dcc.Dropdown(
-                        id = 'q5p1',
-                        options=[
-                            {'label': 'Ascending', 'value': '1'},
-                            {'label': 'Descending', 'value': '2'}
-                            ],
-                        value='1'
-                    )] ,
-                    style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
-                ) ,
 
                 html.Div([
                     html.Button('SEARCH', id='search_5')],
@@ -537,7 +523,7 @@ def update_output(value):
                             {'label': 'Barcelona', 'value': '2'},
                             {'label': 'Berlin', 'value': '3'}
                             ],
-                        value='1'
+                        value='2'
                     )] ,
                     style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
                 ),
@@ -548,70 +534,45 @@ def update_output(value):
                 )
 
             ])
-    elif value == '11' :
-        return html.Div([
-                html.Div([
-                    dcc.Markdown(id = 'output_container_query_11')],
-                    style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
-                ),
-
-
-                html.Div([
-                    html.Button('SEARCH', id='search_11')],
-                    style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
-                )
-
-            ])
-    elif value == '12' :
-        return html.Div([
-                html.Div([
-                    dcc.Markdown(id = 'output_container_query_12')],
-                    style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
-                ),
-                html.Div( [
-                    html.Label('City'),
-                    dcc.Dropdown(
-                        id = 'q12p1',
-                        options=[
-                            {'label': 'Madrid', 'value': '1'},
-                            {'label': 'Barcelona', 'value': '2'},
-                            {'label': 'Berlin', 'value': '3'}
-                            ],
-                        value='1'
-                    )] ,
-                    style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
-                ),
-
-                html.Div([
-                    html.Button('SEARCH', id='search_12')],
-                    style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
-                )
-
-            ])
 
 
 ############## Q1
 app.config['suppress_callback_exceptions']=True
 @app.callback(
-    Output('output_container_query_1', component_property = 'children'),
+    [Output('datatable-q1', component_property = 'data'), Output('datatable-q1', component_property = 'columns')],
     [Input('search_1', 'n_clicks')],
     [State('q1p1', 'value')]
     )
 def update_output(search ,q1p1):
-    order = 'ascending'
-    if(q1p1 == '1') :
-        order = 'ascending'
-    elif(q1p1 == '2') :
-        order = 'descending'
+    order = 'ASC'
+    if(q1p1 == '2') :
+        order = 'DESC'
+    
+
     string_prefix = ''' 
-        \n Print how many hosts in each city have declared the area of their property in square meters. Sort the
-        \n output based on the city name in "{}" order
+            SELECT CI.city_name, COUNT(*)
+            FROM LISTING LI, NEIGHBORHOOD NE, CITY CI
+            WHERE NOT LI.square_feet IS NULL
+            AND LI.neighborhood_id = NE.neighborhood_id
+            AND NE.city_id = CI.city_id
+            GROUP BY CI.city_name
+            ORDER BY CI.city_name {}
         '''.format(order)
+    
+    #return string_prefix
+    c = conn.cursor()
+    c.execute(string_prefix)
 
-    return html.Div([string_prefix])
+    df = pd.DataFrame.from_records(list(c))
+    columns = [
+            {"id": 0, "name": "City_name"},
+            {"id": 1, "name": "Count"},
+            ]
 
-
-#############
+        
+    #return html.Div([string_prefix + date_string])
+    return df.to_dict('records'), columns
+    #return html.Div([string_prefix])
 
 ############## Q2
 app.config['suppress_callback_exceptions']=True
@@ -622,17 +583,15 @@ app.config['suppress_callback_exceptions']=True
     State('q2p2' , 'value')]
 )
 def uptdapte_output(search,q2p1,q2p2) :
-    city = 'madrid'
-    if(q2p1 == '1'):
-        city = 'Madrid'
-    elif(q2p1 == '2'):    
-        city = 'barcelona'
-    elif(q2p1 == '3') :
-        city ='berlin'
+    city = 'Madrid'
+    if(q2p1 == '2'):    
+        city = 'Barcelona'
+    elif(q2p2 == '3') :
+        city =='berlin'
 
     review_scores = 'review_scores_rating'
-    if(q2p2 == '1') : review_scores = 'review_scores_rating'
-    elif(q2p2 == '2') : review_scores = 'review_scores_communication'
+    if(q2p2 == '2') :
+        review_scores = 'review_scores_communication'
     elif(q2p2 == '3') : review_scores = 'review_scores_value'
     elif(q2p2 == '4') : review_scores = 'review_scores_checkin'
     elif(q2p2 == '5') : review_scores = 'review_scores_cleanliness'
@@ -654,17 +613,15 @@ app.config['suppress_callback_exceptions']=True
     [Input('search_3', 'n_clicks')],
     [State('q3p1', 'value')]
     )
-def update_output(search_3 ,q3p1):
+def update_output(search ,q3p1):
     order = 'highest'
-    if(q3p1 == '1') :
-        order = 'highest'
-    elif(q3p1 == '2') :
+    if(q3p1 == '2') :
         order = 'lowest'
     string_prefix_3 = ''' 
         \n Find all the hosts (host_ids, host_names) with the "{}" number of listings.
         '''.format(order)
 
-    return string_prefix_3
+    return html.Div([string_prefix_3])
 
 ############## Q4
 app.config['suppress_callback_exceptions']=True
@@ -675,209 +632,69 @@ app.config['suppress_callback_exceptions']=True
     State('q4p2', 'value'),
     State('q4p3', 'value')]
     )
-def update_output(search_4,q4p1,q4p2,q4p3):
+def update_output(search ,q4p1,q4p2,q4p3):
     extremum = 'cheapest'
-    if(q4p1 == '1') :
-        extremum = 'cheapest'
-    elif(q4p1 == '2' ) :
+    if(extremum == 2 ) :
         extremum = 'highest'
+
+    if(q3p1 == '2') :
+        order = 'lowest'
     
     cancellation = 'flexible'
-    if(q4p2 =='1') :
-        cancelation = 'flexible'
-    elif(q4p2 == '2') :
+    if(q3p2 == '2') :
         cancellation = 'moderate'
-    elif(q4p2 == '3') :   
+    elif(q3p2 == '3') :   
         cancellation = 'strict'
-    elif(q4p2 == '4') :   
+    elif(q3p2 == '4') :   
         cancellation = 'strict_14_with_grace_period'
-    elif(q4p2 == '5') :   
+    elif(q3p2 == '5') :   
         cancellation = 'super_strict_30'
-    elif(q4p2 == '6') : cancellation = 'super_strict_60'
+    elif(q3p2 == '6') : cancellation = 'super_strict_60'
     
     beds = '2'
-    if(q4p3 == '2') :
-        beds = '2'
-    elif(q4p3 == '3') :
+    if(q3p3 == '3') :
         beds = '3'
-    elif(q4p3 == '4') :
+    elif(q3p3 == '4') :
         beds = '4'
-    if(q4p3 == '5') :
+    if(q3p3 == '5') :
         beds = '5'
 
     string_prefix_4 = '''
     \n Find the 5 most "{}" Apartments (based on average price within the available dates) in Berlin
-    \n available for at least one day between 01-03-2019 and 30-04-2019 having at least "{}" beds, a location
-    \n review score of at least 8, "{}" cancellation, and listed by a host with a verifiable government id.
-    '''.format(extremum, beds,cancellation )
+    \n available for at least one day between 01-03-2019 and 30-04-2019 having at least 2 beds, a location
+    \n review score of at least 8, flexible cancellation, and listed by a host with a verifiable government id.
+    '''.format(extremum, cancellation, beds)
 
-    return string_prefix_4
+    return html.Div([string_prefix_4])
 
 
 ############## Q5
 app.config['suppress_callback_exceptions']=True
 @app.callback(
-    Output('output_container_query_5', component_property = 'children'),
-    [Input('search_5', 'n_clicks')],
-    [State('q5p1', 'value')]
+    Output('output_container_query_5s rqery y', component_property = 'children'),
+    [Input('search_1', 'n_clicks')],
+    [State('q1p1', 'value')]
     )
-def update_output(search, q5p1):
+def update_output(search ,q1p1):
     order = 'ascending'
-    if(q5p1 == '1'):
-        order = 'ascending'
-    elif(q5p1 == '2') :
+    if(q1p1 == '2') :
         order = 'descending'
-    string_prefix_5 = ''' 
+    string_prefix = ''' 
         \n Print how many hosts in each city have declared the area of their property in square meters. Sort the
         \n output based on the city name in "{}" order
         '''.format(order)
 
-    return string_prefix_5
+    return html.Div([string_prefix])
 
 ############## Q6
-app.config['suppress_callback_exceptions']=True
-@app.callback(
-    Output('output_container_query_6', component_property = 'children'),
-    [Input('search_6', 'n_clicks')]
-    )
-def update_output(search):
-    string_prefix_6 = '''
-    \nWhat are top three busiest listings per host? The more reviews a listing has, the busier the listing is.
-    '''
-    return string_prefix_6
-
 
 ############## Q7
-app.config['suppress_callback_exceptions']=True
-@app.callback(
-    Output('output_container_query_7', component_property = 'children'),
-    [Input('search_7', 'n_clicks')],
-    [State('q7p1', 'value'),
-    State('q7p2','value')]
-    )
-def update_output(search, q7p1, q7p2):
-    city = 'Madrid'
-    if(q7p1 == '1'):
-        city = 'Madrid'
-    elif(q7p1 == '2') :
-        city = 'Barcelona'
-    elif(q7p1 == '3') :
-        city = 'Berlin'
-
-    room_type = 'private room'
-    if(q7p2 == '1'):
-        room_type = 'private room'
-    elif(q7p2 == '2') :
-        room_type = 'entire room'
-    elif(q7p2 == '3') :
-        room_type = 'shared room'
-    string_prefix_7 = '''
-    \nWhat are the three most frequently used amenities at each neighborhood in "{}" for the listings with
-    \n“{}” room type?
-    '''.format(city, room_type)
-
-    return string_prefix_7
 
 ############## Q8
-app.config['suppress_callback_exceptions']=True
-@app.callback(
-    Output('output_container_query_8', component_property = 'children'),
-    [Input('search_8', 'n_clicks')],
-    [State('q8p1', 'value')]
-    )
-def update_output(search, q8p1):
-    rating = 'rating of the listing'
-    if(q8p1 == '1'):
-        rating = 'rating of the listing'
-    elif(q8p1 == '2') :
-        rating = 'Communication with the host score'
-    elif(q8p1 == '3') :
-        rating = 'Value of the material score'
-    elif(q8p1 == '4') :
-        rating = 'Checkin score'
-    elif(q8p1 == '5') :
-        rating = 'Cleanliness of the listing'
-    elif(q8p1 == '6') :
-        rating = 'Accuracy of the description'
-    elif(q8p1 == '7') :
-        rating = 'Location score'
-            
-    string_prefix_8 = '''
-    \n What is the difference in the average "{}" of the host who has the most
-    \n diverse way of verifications and of the host who has the least diverse way of verifications. In case of a
-    \n multiple number of the most or the least diverse verifying hosts, pick a host one from the most and
-    \n one from the least verifying hosts.
-    '''.format(rating)
-    return string_prefix_8
 
 ############## Q9
-app.config['suppress_callback_exceptions']=True
-@app.callback(
-    Output('output_container_query_9', component_property = 'children'),
-    [Input('search_9', 'n_clicks')]
-    )
-def update_output(search):
-    string_prefix_9 = '''
-    \n What is the city who has the highest number of reviews for the room types whose average number of
-    \n accommodates are greater than 3.
-    '''
-    return string_prefix_9
 
 ############## Q10
-app.config['suppress_callback_exceptions']=True
-@app.callback(
-    Output('output_container_query_10', component_property = 'children'),
-    [Input('search_10', 'n_clicks')],
-    [State('q10p1', 'value' )]
-    )
-def update_output(search, q10p1):
-    city = 'Madrid'
-    if(q10p1 == '1'):
-        city = 'Madrid'
-    elif(q10p1 == '2'):
-        city = 'Barcelona'
-    elif(q10p1 == '2'):
-        city = 'Berlin'
-    string_prefix_10  = '''
-    \n Print all the neighborhoods in {} which have at least 50 percent of their listings occupied in year
-    \n 2019 and their host has joined airbnb before 01.06.2017
-    '''.format(city)
-
-    return string_prefix_10
-
-############### Q11
-app.config['suppress_callback_exceptions']=True
-@app.callback(
-    Output('output_container_query_11', component_property = 'children'),
-    [Input('search_11', 'n_clicks')]
-    )
-def update_output(search):
-    string_prefix_11  = '''
-    \n Print all the countries that in 2018 had at least 20"%"" of their listings available.
-    '''
-    return string_prefix_11
-
-############### Q12
-app.config['suppress_callback_exceptions']=True
-@app.callback(
-    Output('output_container_query_12', component_property = 'children'),
-    [Input('search_12', 'n_clicks')],
-    [State('q12p1', 'value')]
-    )
-def update_output(search, q12p1):
-    city = 'Madrid'
-    if(q12p1 == '1'):
-        city = 'Madrid'
-    elif(q12p1 == '2'):
-        city = 'Barcelona'
-    elif(q12p1 == '3'):
-        city = 'Berlin'
-    string_prefix_12  = '''
-    \n Print all the neighborhouds in "{}" where more than 5 percent of their accommodation’s
-    \n cancelation policy is strict with grace period.
-    '''.format(city)
-
-    return string_prefix_12
 
 string_query_4 = '''
 \n Find the 5 most cheapest Apartments (based on average price within the available dates) in Berlin
@@ -931,84 +748,6 @@ string_query_12 = '''
 
 
 #################### Layout insert
-layout_insert= html.Div([
-    html.Div( [
-        html.Label('Type of insertion'),
-            dcc.Dropdown(
-                id = 'insertion_tab',
-                options=[
-                    {'label': 'Listing', 'value': 'listing'},
-                    {'label': 'Host account creation', 'value': 'host'},
-                    {'label': 'Review of listing', 'value': 'review'}
-                            ],
-                    value='3'
-           )] ,
-            style={'marginLeft': 10, 'marginTop': 5, 'width': '30%', 'display': 'inline-block'}
-    ),
-    
-    html.Div(
-        id='insertion_content',
-        style = {'marginLeft ': 10 , 'marginTop' : 10 , 'width' : '100%', 'display' : 'inline-block'}
-    )
-])
-
-@app.callback(Output('insertion_content', 'children'),
-    [Input('insertion_tab', 'value')])
-
-def render_content_insert(tab) :
-    if tab == 'listing' :
-        return layout_insert_listing()
-    elif tab == 'host' :
-        return layout_insert_host()
-    elif tab == 'review' :
-        return layout_insert_review()
-
-# Read in the data 
-#df = active_inactive10
-
-# Get a list of all the parties
-#parties = active_inactive10['Party'].unique()
-
-def layout_insert_listing():
-    return html.Div([
-        dcc.Dropdown(
-            id='madrid_neighbothood',
-            options=[
-            {'label': 'acacias', 'value': '1'},
-            {'label': 'adelfas', 'value': '2'},
-            {'label': 'almagro', 'value': '3'},
-            {'label': 'almenara', 'value': '4'},
-            {'label': 'aluche', 'value': '5'},
-            {'label': 'arapiles', 'value': '6'},
-            {'label': 'argaelles', 'value': '7'},
-            {'label': 'arganzurla', 'value': '8'},
-            {'label': 'atocha', 'value': '9'},
-            {'label': 'barajas', 'value': '10'},
-            {'label': 'bellas vistas','value':'11'},
-            {'label': 'bellas vistas','value':'12'},
-            {'label': 'bellas vistas','value':'13'},
-            {'label': 'bellas vistas','value':'14'},
-            {'label': 'bellas vistas','value':'15'},
-            {'label': 'bellas vistas','value':'16'},
-            {'label': 'bellas vistas','value':'17'},
-            {'label': 'bellas vistas','value':'18'},
-            
-            ],
-            multi=True,
-            value='All Parties'),
-        dcc.Graph(id='funnel-graph'),
-    ])
-
-@app.callback(
-    dash.dependencies.Output('funnel-graph', 'figure'),
-    [dash.dependencies.Input('Party', 'value')])
-
-
-def layout_insert_host():
-    return html.Div('host')
-
-def layout_insert_review():
-    return html.Div('review')
 
 #####################end Layout Insert 
 
@@ -1029,7 +768,9 @@ def render_content(tab):
     elif tab == 'predefined_queries':
     	return layout_predefinied
     elif tab == 'insert':
-    	return layout_insert
+    	return html.Div([
+            html.H3('tab content insert')
+        ])
     elif tab == 'delete':
     	return html.Div([
             html.H3('Tab content delete')
