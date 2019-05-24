@@ -4,6 +4,7 @@ import dash_core_components as dcc
 import dash_table
 import pandas as pd
 import numpy as np
+import dash_daq as daq
 #import pymysql as _mysql
 #import _mysql
 import cx_Oracle
@@ -79,23 +80,14 @@ layout_search = html.Div([
     
     html.Div([
         html.Label('Number of beds'),
-        dcc.Dropdown(
-            options=[
-                {'label': '1 Bed', 'value': '1'},
-                {'label': '2 Beds', 'value': '2'},
-                {'label': '3 Beds', 'value': '3'},
-                {'label': '4 Beds', 'value': '4'},
-                {'label': '5 Beds', 'value': '5'},
-                {'label': '6 Beds', 'value': '6'},
-                {'label': '7 Beds', 'value': '7'},
-                {'label': '8 Beds', 'value': '8'},
-                {'label': '9 Beds', 'value': '9'},
-                {'label': '10 Beds', 'value': '10'}
-                ],
-            value='1'
-            )] , 
+        daq.NumericInput(
+          id='beds_number',
+          max=10,
+          value=5,
+          min=0
+        )] , 
          style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
-        ),
+    ),
     
     html.Div([
         html.Label('Daily price range'),
@@ -129,11 +121,12 @@ app.config['suppress_callback_exceptions']=True
     Input(component_id='loc_id', component_property='value'),
     Input(component_id = 'my-date-picker-range', component_property ='start_date'),
     Input(component_id = 'my-date-picker-range', component_property = 'end_date'),
+    Input(component_id = 'beds_number', component_property = 'value'),
     Input(component_id = 'non-linear-range-slider', component_property = 'value')
     ]
 )
 
-def update_output(loc_id_name, start_date, end_date, price):
+def update_output(loc_id_name, start_date, end_date, beds,price):
     string_prefix = 'The location is "{}"'.format(loc_id_name)
     
     #return string_prefix
@@ -143,6 +136,8 @@ def update_output(loc_id_name, start_date, end_date, price):
     if end_date is not None :
         string_prefix += ' and ends : '
         string_prefix += date_to_string(end_date)
+    if beds is not None :
+        string_prefix += ' for a number of "{}" beds '.format(beds)
     if price is not None : 
         transformed_value = [transform_value(v) for v in price]
         price_string = ' and price range is [{:0.2f}, {:0.2f}]'.format(
@@ -1312,8 +1307,249 @@ WHERE up.neighborhood_id = down.neighborhood_id AND up.count1 >= 0.05 * down.cou
 
 #################### Layout insert
 layout_insert = html.Div([
-    
-    html.Div([ 
+     
+
+    html.Div([
+        #html.Label('Type of insertion'),
+        html.H6('Type of insertion', className = "gs-header gs-text-header padded"),
+        html.Div(
+            [dcc.Dropdown(
+            id='dropdown_insert',
+            options=[
+            {'label': 'Listing', 'value': '1'},
+            {'label': 'Host', 'value': '2'},
+            {'label': 'Review', 'value': '3'}
+            ],
+            value='NYC',
+            #size = '400',
+            )]
+        )],   
+        style={'marginLeft': 10, 'marginTop': 5, 'width': '50%', 'display': 'inline-block'}
+    ),
+
+    html.Div(id='output_container_insert',
+        style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+    ) 
+
+])
+
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_insert', 'children'),
+    [Input('dropdown_insert', 'value')],
+    ##[State('checklist','values')]
+    )
+
+def update_output(value):
+    if value == '1'  :
+        return html.Div([
+            
+            ### Name
+            html.Div([
+                html.Label("Listing name"),
+                dcc.Input(
+                id = 'search_insert',
+                placeholder='',
+                type='text',
+                value='',
+                size = '50'
+                )],
+            style={'marginLeft': 10, 'marginTop': 10, 'width': '100%', 'display': 'inline-block'}
+            ),
+
+            ### Price
+            html.Div([
+                html.Div([
+                    html.Label("Daily price"),
+                    html.Div([
+                        daq.Slider(
+                        id = 'daily_slider',
+                        min=0,
+                        max=500,
+                        value=50,
+                        handleLabel={"showCurrentValue": True,"label": "VALUE"},
+                        step=10
+                        )
+                    ] ,
+                    style={'marginTop': 40, 'width': '100%'}
+                    )
+                ], 
+                className="six columns"
+                ),
+                html.Div([
+                    html.Label("Weekly price"),
+                    html.Div([
+                        daq.Slider(
+                        id = 'weekly_slider',
+                        min=0,
+                        max=2000,
+                        value=50,
+                        handleLabel={"showCurrentValue": True,"label": "VALUE"},
+                        step=10,
+                        #height = 12
+                        )
+                    ] ,
+                    style={'marginTop': 40, 'width': '100%'}
+                    )
+                ],
+                className="six columns"
+                ),
+            ],
+            style={'marginLeft': 10, 'marginTop': 10, 'width': '100%'}
+            ),
+            
+            ### Availability and number of beds 
+            html.Div([
+                ### Availability
+                html.Div([
+                    html.Div([
+                        html.Label('Availability')
+                    ]),
+                    dcc.DatePickerRange(
+                        id='my-date-picker-range',
+                        min_date_allowed=dt(2019, 8, 5),
+                        max_date_allowed=dt(2019, 9, 19),
+                        initial_visible_month=dt(2019, 8, 5),
+                    )],
+                className="six columns",
+                style ={'marginLeft': 10, 'marginTop': 10, 'width': '100%'}
+                ),
+
+                ###beds
+                html.Div([
+                    html.Label('Number of beds'),
+                    daq.NumericInput(
+                    id='beds_number_insert',
+                    max=10,
+                    value=5,
+                    min=0
+                )] , 
+                className="six columns",
+                style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
+                ),
+            ],
+            style={'marginLeft': 10, 'marginTop': 10, 'width': '100%'}
+            ),
+
+            html.Div([
+                html.Label("Accommodates"),
+
+                dcc.Checklist(
+                id = 'accommodates' ,
+                options=[
+                    {'label': 'TV', 'value': '71'},
+                    {'label': 'Sound system', 'value': '8'},
+                    {'label': 'Printer', 'value': '9'},
+                    {'label': 'Oven', 'value': '52'},
+                    {'label': 'Microwave', 'value': '15'},
+                    {'label': 'Pool cover', 'value': '150'},
+                    {'label': 'Pool', 'value': '37'},
+                    {'label': 'DVD player', 'value': '16'},
+                    {'label': 'Gym', 'value': '21'},
+                    {'label': 'netflix', 'value': '24'},
+                    {'label': 'Full kitchen', 'value': '27'},
+                    {'label': 'Hair dryer', 'value': '30'},
+                    {'label': 'Washer', 'value': '35'},
+                    {'label': 'Outdoor parking', 'value': '45'},
+                    {'label': 'Internet', 'value': '55'},
+                    {'label': 'Terrace', 'value': '137'},
+                ],
+                values=['host', 'listing' , 'neighborhood', 'amenity', 'bed_type',
+                    'calendar', 'cancellation', 'city', 'country', 'host_verifications',
+                    'is_equiped_with', 'property_type', 'reserved_on' , 'response_time',
+                    'reviewer', 'reviews', 'room_type', 'verifies'],
+                labelStyle={'display': 'inline-block'}
+                )],
+                style={'marginLeft': 10, 'marginTop': 10, 'width': '100%', 'display': 'inline-block'}
+            ),
+
+            ### Property_type and description
+            html.Div([
+                html.Div( [
+                html.Label("Property_type"),
+                dcc.Dropdown(
+                    id = 'property_type_dropdown',
+                    options=[
+                        {'label': 'Apartment', 'value': '1'},
+                        {'label': 'Hostel', 'value': '2'},
+                        {'label': 'Loft', 'value': '3'},
+                        {'label': 'Guest suite', 'value': '4'},
+                        {'label': 'House', 'value': '5'},
+                        {'label': 'Serviced apartment', 'value': '6'},
+                        {'label': 'Other', 'value': '7'},
+                        {'label': 'Condominium', 'value': '8'},
+                        {'label': 'Townhouse', 'value': '9'},
+                        {'label': 'Bed and breakfast', 'value': '10'},
+                        {'label': 'Guesthouse', 'value': '11'},
+                        {'label': 'Chalet', 'value': '12'},
+                        {'label': 'Aparthotel', 'value': '13'},
+                        {'label': 'Casa particularDome house', 'value': '14'},
+                        {'label': 'Dome House', 'value': '15'},
+                        {'label': 'Boutique hotel', 'value': '16'},
+                        {'label': 'Hotel', 'value': '17'},
+                        {'label': 'Camper/rv', 'value': '18'},
+                        {'label': 'Hut', 'value': '19'},
+                        {'label': 'Tiny House', 'value': '20'},
+                        {'label': 'Villa', 'value': '21'},
+                        {'label': 'Dorm', 'value': '22'},
+                        {'label': 'Earth House', 'value': '23'},
+                        {'label': 'Pension (South Korea)', 'value': '24'},
+                        {'label': 'Cottage', 'value': '25'},
+                        {'label': 'Bungalow', 'value': '26'},
+                        {'label': 'Cabin', 'value': '27'},
+                        {'label': 'Castle', 'value': '28'},
+                        {'label': 'Boat', 'value': '29'},
+                        {'label': 'Houseboat', 'value': '30'},
+                        {'label': 'Tipi', 'value': '31'},
+                        {'label': 'Resort', 'value': '32'},
+                        {'label': 'Train', 'value': '33'},
+                        {'label': 'In-Law', 'value': '34'},
+                        {'label': 'Cave', 'value': '35'},
+                        {'label': 'Barn', 'value': '36'},
+                        {'label': 'Farm stay', 'value': '37'},
+
+                    ],
+                    value='1'
+                    )
+                ] ,
+                className="six columns",
+                style={'marginLeft': 10, 'marginTop': 10, 'width': '30%', 'display': 'inline-block'}
+                ),
+
+                html.Div([
+                    html.Label("description"),
+                    dcc.Textarea(
+                        placeholder='Enter a value...',
+                        value='Describe in a few words...',
+                        style={'width': '100%'}
+                    )  
+                ] ,
+                className="six columns",
+                style={'marginLeft': 10, 'marginTop': 10, 'marginBotom' : 20, 'width': '30%', 'display': 'inline-block'}
+                )        
+            ])
+        ])
+
+    elif value == '2' :
+        return html.Div([
+        html.Button('SEARCH in the database', id='button_insert')],
+        style={'marginLeft': 200, 'marginTop': 80, 'width': '100%', 'display': 'inline-block'}
+        )
+    elif value == '3' :
+        return html.Div([
+        html.Button('SEARCH in the database', id='button_insert')],
+        style={'marginLeft': 200, 'marginTop': 80, 'width': '100%', 'display': 'inline-block'}
+        )
+
+'''
+html.Div([
+        html.Button('SEARCH in the database', id='button_insert')],
+        style={'marginLeft': 200, 'marginTop': 80, 'width': '100%', 'display': 'inline-block'}
+    ),
+'''
+
+'''
+html.Div([ 
         html.Label("Insert"),
         dcc.Input(
         id = 'search_insert',
@@ -1323,58 +1559,16 @@ layout_insert = html.Div([
         )],
         style={'marginLeft': 10, 'marginTop': 10, 'width': '100%', 'display': 'inline-block'}
     ),
+'''
 
-    html.Div([
-        dcc.Checklist(
-        id = 'checklist' ,
-        options=[
-            {'label': 'Host', 'value': 'host'},
-            {'label': 'Listing', 'value': 'listing'},
-            {'label': 'Neighborhood', 'value': 'neighborhood'},
-            {'label': 'Amenity equipment', 'value': 'amenity'},
-            {'label': 'Bed type', 'value': 'bed_type'},
-            {'label': 'Calendar', 'value': 'calendar'},
-            {'label': 'Cancellation policy', 'value': 'cancellation'},
-            {'label': 'City', 'value': 'city'},
-            {'label': 'Country', 'value': 'country'},
-            {'label': 'Host Verifications', 'value': 'host_verifications'},
-            {'label': 'Equipement', 'value': 'is_equiped_with'},
-            {'label': 'Property type', 'value': 'property_type'},
-            {'label': 'Reservation', 'value': 'reserved_on'},
-            {'label': 'Response Time', 'value': 'response_time'},
-            {'label': 'Reviewer', 'value': 'reviewer'},
-            {'label': 'Reviews', 'value': 'reviews'},
-            {'label': 'Room type', 'value': 'room_type'},
-            {'label': 'Verifies', 'value': 'verifies'},
-        ],
-        values=['host', 'listing' , 'neighborhood', 'amenity', 'bed_type',
-            'calendar', 'cancellation', 'city', 'country', 'host_verifications',
-            'is_equiped_with', 'property_type', 'reserved_on' , 'response_time',
-            'reviewer', 'reviews', 'room_type', 'verifies'],
-        labelStyle={'display': 'inline-block'}
-        )],
-        style={'marginLeft': 30, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
-    ),
-
-
-    html.Div([
-        html.Button('SEARCH in the database', id='button_insert')],
-        style={'marginLeft': 200, 'marginTop': 80, 'width': '100%', 'display': 'inline-block'}
-    ),
-    html.Div([
-        dcc.Markdown(id = 'output_container_insert')],
-        style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
-    ),    
-
-])
-
-
+'''
 @app.callback(
     Output('output_container_insert' , component_property ='children'),
     [Input('button_insert','n_clicks')],
     [State('checklist','values'),
     State('search_insert', 'value')]
     )
+
 
 def render_target_insert(n_clicks,checklist, value) : 
     string_prefix = 'You typed "{}" '.format(value)
@@ -1419,6 +1613,8 @@ def render_target_insert(n_clicks,checklist, value) :
 
     string_prefix += '.'
     return string_prefix
+'''
+
 #####################end Layout Insert 
 
 ###################### Layout DELETE
@@ -1438,9 +1634,43 @@ layout_delete = html.Div([
 def render_content(tab):
     if tab == 'home':
         return html.Div([
-            dcc.Markdown(children = markdown_text)],
-            style={'marginLeft': 200, 'marginTop': 100, 'width': '49%', 'display': 'inline-block'}
+            html.Div([
+                dcc.Markdown(children = markdown_text)
+                ],
+                style={'marginLeft': 200, 'marginTop': 100, 'width': '49%', 'display': 'inline-block'}
+            ),
+            html.Div([
+                dcc.Checklist(
+                id = 'checklist' ,
+                options=[
+                    {'label': 'Host', 'value': 'host'},
+                    {'label': 'Listing', 'value': 'listing'},
+                    {'label': 'Neighborhood', 'value': 'neighborhood'},
+                    {'label': 'Amenity equipment', 'value': 'amenity'},
+                    {'label': 'Bed type', 'value': 'bed_type'},
+                    {'label': 'Calendar', 'value': 'calendar'},
+                    {'label': 'Cancellation policy', 'value': 'cancellation'},
+                    {'label': 'City', 'value': 'city'},
+                    {'label': 'Country', 'value': 'country'},
+                    {'label': 'Host Verifications', 'value': 'host_verifications'},
+                    {'label': 'Equipement', 'value': 'is_equiped_with'},
+                    {'label': 'Property type', 'value': 'property_type'},
+                    {'label': 'Reservation', 'value': 'reserved_on'},
+                    {'label': 'Response Time', 'value': 'response_time'},
+                    {'label': 'Reviewer', 'value': 'reviewer'},
+                    {'label': 'Reviews', 'value': 'reviews'},
+                    {'label': 'Room type', 'value': 'room_type'},
+                    {'label': 'Verifies', 'value': 'verifies'},
+                ],
+                values=['host', 'listing' , 'neighborhood', 'amenity', 'bed_type',
+                    'calendar', 'cancellation', 'city', 'country', 'host_verifications',
+                    'is_equiped_with', 'property_type', 'reserved_on' , 'response_time',
+                    'reviewer', 'reviews', 'room_type', 'verifies'],
+                labelStyle={'display': 'inline-block'}
+                )],
+                style={'marginLeft': 10, 'marginTop': 10, 'width': '100%', 'display': 'inline-block'}
             )
+        ])
     elif tab == 'search':
         return layout_search
     elif tab == 'predefined_queries':
