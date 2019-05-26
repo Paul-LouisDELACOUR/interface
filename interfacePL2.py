@@ -54,12 +54,30 @@ app.layout = html.Div([
 
 #####Here are the different layouts for the different modes
 
-##Search
-layout_search = html.Div([
-    html.Div([
+'''
+html.Div([
         html.Label('Location'),
         dcc.Input(id='loc_id', value='Location', type='text')],
         style={'marginLeft': 10, 'marginTop': 10, 'width': '49%', 'display': 'inline-block'}
+    ),
+'''
+
+##Search
+layout_search = html.Div([
+
+    html.Div( [
+        html.Label('Location'),
+        dcc.Dropdown(
+            id = 'loc_id',
+            options=[
+                {'label': 'Madrid', 'value': '1'},
+                {'label': 'Barcelona', 'value': '2'},
+                {'label': 'Berlin', 'value': '3'}
+                ],
+            value='1'
+        )
+    ] ,
+    style={'marginLeft': 10, 'marginTop': 5, 'width': '50%', 'display': 'inline-block'}
     ),
 
     
@@ -127,7 +145,7 @@ app.config['suppress_callback_exceptions']=True
 )
 
 def update_output(loc_id_name, start_date, end_date, beds,price):
-    string_prefix = 'The location is "{}"'.format(loc_id_name)
+    string_prefix = 'The location is "{}"'.format(get_name_loc(loc_id_name))
     
     #return string_prefix
     if start_date is not None:
@@ -146,6 +164,14 @@ def update_output(loc_id_name, start_date, end_date, beds,price):
         string_prefix += price_string
 
     return html.Div([string_prefix])
+
+def get_name_loc(val) : 
+    if(val == '1') :
+        return 'Madrid'
+    elif(val == '2') : 
+        return 'Barcelona'
+    else :
+        return 'Berlin'
     
 def transform_value(value):
     return value
@@ -171,8 +197,6 @@ def update_output(loc_id_name):
     #return html.Div([string_prefix + date_string])
     return html.Div([c[0]])
 '''
-
-
 
 
 ################################### SEARCH END
@@ -1532,9 +1556,69 @@ def update_output(value):
 
     elif value == '2' :
         return html.Div([
-        html.Button('SEARCH in the database', id='button_insert')],
-        style={'marginLeft': 200, 'marginTop': 80, 'width': '100%', 'display': 'inline-block'}
+            html.Div([
+                html.Label("Host name"),
+                dcc.Input(
+                    id = 'host_insert',
+                    placeholder='',
+                    type='text',
+                    value=''
+                )
+            ]),
+            html.Div([
+                html.Label("Host about"),
+                dcc.Textarea(
+                    placeholder='Enter a description...',
+                    value='Describe in a few words...',
+                    style={'width': '100%'}
+                )  
+            ] ,
+             style={'marginLeft': 0, 'marginTop': 10, 'marginBotom' : 20, 'width': '30%', 'display': 'inline-block'}
+            ),
+
+            html.Div( [
+                html.Label('Location / neighborhood'),
+                dcc.Dropdown(
+                    id = 'loc_id',
+                    options=[
+                      {'label': 'Madrid', 'value': '1'},
+                       {'label': 'Barcelona', 'value': '2'},
+                       {'label': 'Berlin', 'value': '3'}
+                    ],
+                    value='1'
+                )
+            ] ,
+
+            style={'marginLeft': 10, 'marginTop': 5, 'width': '50%', 'display': 'inline-block'}
+            ),
+
+            html.Div([
+                html.Label("Response Time"),
+                dcc.Dropdown(
+                    id = 'response_time',
+                    options=[
+                        {'label': 'Within an hour', 'value': '1'},
+                        {'label': 'Within a few hours', 'value': '2'},
+                        {'label': 'Within a day', 'value': '3'},
+                        {'label': 'A few days or more', 'value': '4'},
+                        {'label': 'Not specified', 'value': '5'}
+                    ],
+                    value = '5'
+                )
+
+            ],
+            style={'marginLeft': 0, 'marginTop': 5, 'width': '40%', 'display': 'inline-block'}
+            ),
+
+            html.Div([
+                html.Button('ENROLL', id='button_insert')
+            ],
+            style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+        ],
+        style={'marginLeft': 10, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
         )
+
     elif value == '3' :
         return html.Div([
         html.Button('SEARCH in the database', id='button_insert')],
@@ -1633,11 +1717,21 @@ layout_delete = html.Div([
 
 def render_content(tab):
     if tab == 'home':
-        return html.Div([
+        return home_layout
+    elif tab == 'search':
+        return layout_search
+    elif tab == 'predefined_queries':
+    	return layout_predefinied
+    elif tab == 'insert':
+    	return layout_insert
+    elif tab == 'delete':
+    	return layout_delete
+
+home_layout = html.Div([
             html.Div([
                 dcc.Markdown(children = markdown_text)
                 ],
-                style={'marginLeft': 200, 'marginTop': 100, 'width': '49%', 'display': 'inline-block'}
+                style={'marginLeft': 20, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
             ),
             html.Div([
                 dcc.Checklist(
@@ -1669,16 +1763,22 @@ def render_content(tab):
                 labelStyle={'display': 'inline-block'}
                 )],
                 style={'marginLeft': 10, 'marginTop': 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Div([
+                    html.Label('Search in the website'),
+                ],
+                style = {'marginLeft' : 20}
+                ),
+                dcc.Input(id='research_input', value='', type='text'),
+                html.Div([
+                    html.Button('Enter', id='search_home')],
+                    style={'marginLeft': 40, 'marginTop': 10, 'width': '100%', 'display': 'inline-block'}
+                ),
+            ],
+                style={'marginLeft': 300, 'marginTop': 50, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
-    elif tab == 'search':
-        return layout_search
-    elif tab == 'predefined_queries':
-    	return layout_predefinied
-    elif tab == 'insert':
-    	return layout_insert
-    elif tab == 'delete':
-    	return layout_delete
     
 
 if __name__ == '__main__':
