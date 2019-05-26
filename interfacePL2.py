@@ -1550,8 +1550,17 @@ def update_output(value):
                 ] ,
                 className="six columns",
                 style={'marginLeft': 10, 'marginTop': 10, 'marginBotom' : 20, 'width': '30%', 'display': 'inline-block'}
-                )        
-            ])
+                ),
+
+                html.Div([
+                    html.Button('INSERT', id='button_insert')
+                ],
+                className="six columns",
+                style={'marginLeft': 10, 'marginTop': 10, 'marginBotom' : 20, 'width': '50%', 'display': 'inline-block'}
+                )     
+            ],
+            style={'marginLeft': 10, 'marginTop': 10, 'width': '100%'}
+            )
         ])
 
     elif value == '2' :
@@ -1611,7 +1620,7 @@ def update_output(value):
             ),
 
             html.Div([
-                html.Button('ENROLL', id='button_insert')
+                html.Button('ENROLL', id='button_enroll')
             ],
             style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
             ),
