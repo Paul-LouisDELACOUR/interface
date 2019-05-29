@@ -1890,13 +1890,14 @@ layout_delete = html.Div([
             #size = '400',
             )
         ],   
-        style={'marginLeft': 10, 'marginTop': 5, 'width': '70%', 'display': 'inline-block'}
+        style={'marginLeft': 10, 'marginTop': 5, 'marginBotom' : 300,'width': '70%', 'display': 'inline-block'}
         ),
 
         html.Div(
             id='output_container_delete',
             style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
-        )    
+        ),
+
     ])
 ])
 
@@ -1922,7 +1923,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d1',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del1')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result1',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '2' : 
         return html.Div([
@@ -1942,7 +1952,17 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d2',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del2')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result2',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
+
         ])
     elif val == '3' : 
         return html.Div([
@@ -1957,12 +1977,21 @@ def render_content(val):
                     ),
                 ],
                  className="six columns",
-                 style={'marginTop': 10,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
+                 style={'marginLeft' : 10 , 'marginTop': 10,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
             ),
             html.Div( 
                 id = 'output_container_d3',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del3')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result3',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '4' : 
         return html.Div([
@@ -1982,7 +2011,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d4',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del4')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result4',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '5' : 
         return html.Div([
@@ -2002,7 +2040,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d5',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del5')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result5',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '6' : 
         return html.Div([
@@ -2022,7 +2069,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d6',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del6')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result6',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '7' : 
         return html.Div([
@@ -2042,7 +2098,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d7',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del7')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result7',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '8' : 
         return html.Div([
@@ -2062,7 +2127,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d8',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del8')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result8',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '9' : 
         return html.Div([
@@ -2094,7 +2168,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d9',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del9')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result9',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '10' : 
         return html.Div([
@@ -2114,7 +2197,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d10',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del10')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result10',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '11' : 
         return html.Div([
@@ -2134,7 +2226,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d11',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del11')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result11',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '12' : 
         return html.Div([
@@ -2154,7 +2255,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d12',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del12')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result12',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '13' : 
         return html.Div([
@@ -2186,7 +2296,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d13',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del13')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result13',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '14' : 
         return html.Div([
@@ -2206,7 +2325,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d14',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del14')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result14',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '15' : 
         return html.Div([
@@ -2226,7 +2354,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d15',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del15')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result15',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '16' : 
         return html.Div([
@@ -2258,7 +2395,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d16',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del16')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result16',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '17' : 
         return html.Div([
@@ -2278,7 +2424,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d17',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del17')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result17',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
     elif val == '18' : 
         return html.Div([
@@ -2310,7 +2465,16 @@ def render_content(val):
             html.Div( 
                 id = 'output_container_d18',
                 style={'marginTop': 30,'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
-            )
+            ),
+            html.Div([
+                html.Button('DELETE', id='del18')
+            ],
+                style={'marginLeft': 50, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id= 'output_container_d_result18',
+                style={'marginLeft': 10, 'marginTop': 5, 'width': '100%', 'display': 'inline-block'}
+            ),
         ])
 
 @app.callback(Output('output_container_d1', 'children'),
@@ -2427,6 +2591,160 @@ def render_target(room_type_id) :
 def render_target(host_id,host_verifications_id) :
     string = "You have entered amenity_id = {} and host_verifications_id = {}".format(host_id,host_verifications_id )
     return string
+
+####################################
+
+#1
+@app.callback(Output('output_container_d_result1', 'children'),
+            [Input('del1' , 'value')],
+            [State('amenity_id', 'value')])
+def render_target(del1,amenity_id) :
+    string = "You have entered amenity_id = {}".format(amenity_id)
+    return string
+
+#2
+@app.callback(Output('output_container_d_result2', 'children'),
+              [Input('del2' , 'value')],
+              [State('bedtype_id', 'value')])
+def render_target(del2,bedtype_id) :
+    string = "You have entered bedtype_id = {}".format(bedtype_id)
+    return string
+
+#3
+@app.callback(Output('output_container_d_result3', 'children'),
+              [Input('del3' , 'value')],
+              [State('calendar_id', 'value')])
+def render_target(del3,calendar_id) :
+    string = "You have entered calendar_id = {}".format(calendar_id)
+    return string
+
+#4
+@app.callback(Output('output_container_d_result4', 'children'),
+              [Input('del4' , 'value')],
+              [State('cancellation_policy_id', 'value')])
+def render_target(del4,cancellation_policy_id) :
+    string = "You have entered cancellation_policy_id = {}".format(cancellation_policy_id)
+    return string
+
+#5
+@app.callback(Output('output_container_d_result5', 'children'),
+              [Input('del5' , 'value')],
+              [State('city_id', 'value')])
+def render_target(del5,city_id) :
+    string = "You have entered city_id = {}".format(city_id)
+    return string
+
+#6
+@app.callback(Output('output_container_d_result6', 'children'),
+              [Input('del6' , 'value')],
+              [State('country_id', 'value')])
+def render_target(del6,country_id) :
+    string = "You have entered country_id = {}".format(country_id)
+    return string
+
+#7
+@app.callback(Output('output_container_d_result7', 'children'),
+              [Input('del1' , 'value')],
+              [State('host_id', 'value')])
+def render_target(del1,host_id) :
+    string = "You have entered host_id = {}".format(host_id)
+    return string
+
+#8
+@app.callback(Output('output_container_d_result8', 'children'),
+              [Input('del8' , 'value')],
+              [State('host_verifications_id', 'value')])
+def render_target(del8,host_verifications_id) :
+    string = "You have entered host_verifications_id = {}".format(host_verifications_id)
+    return string
+
+#9
+@app.callback(Output('output_container_d_result9', 'children'),
+              [Input('del1' , 'value')],
+              [State('listing_id', 'value'),
+              State('amenity_id', 'value')
+              ])
+def render_target(del9,listing_id, amenity_id) :
+    string = "You have entered listing_id = {} and amenity_id = {}".format(listing_id ,amenity_id)
+    return string
+
+#10
+@app.callback(Output('output_container_d_result10', 'children'),
+              [Input('del10' , 'value')],
+              [State('listing_id', 'value')])
+def render_target(del10,listing_id) :
+    string = "You have entered listing_id = {}".format(listing_id)
+    return string
+
+#11
+@app.callback(Output('output_container_d_result11', 'children'),
+              [Input('del11' , 'value')],
+              [State('neighborhood_id', 'value')])
+def render_target(del11,neighborhood_id) :
+    string = "You have entered neighborhood_id = {}".format(neighborhood_id)
+    return string
+
+#12
+@app.callback(Output('output_container_d_result12', 'children'),
+              [Input('del12' , 'value')],
+              [State('property_type_id', 'value')])
+def render_target(del12,property_type_id) :
+    string = "You have entered property_type_id = {}".format(property_type_id)
+    return string
+#13
+@app.callback(Output('output_container_d_result13', 'children'),
+              [Input('del13' , 'value')],
+              [State('listing_id', 'value'),
+              State('calendar_id', 'value')
+              ])
+def render_target(del13,listing_id,calendar_id) :
+    string = "You have entered listing_id = {} and calendar_id = {}".format(listing_id,calendar_id)
+    return string
+
+#14
+@app.callback(Output('output_container_d_result14', 'children'),
+              [Input('del14' , 'value')],
+              [State('response_time_id', 'value')])
+def render_target(del14,response_time_id) :
+    string = "You have entered response_time_id = {}".format(response_time_id)
+    return string
+
+#15
+@app.callback(Output('output_container_d_result15', 'children'),
+              [Input('del15' , 'value')],
+              [State('reviewer_id', 'value')])
+def render_target(del15,reviewer_id) :
+    string = "You have entered reviewer_id = {}".format(reviewer_id)
+    return string
+
+#16
+@app.callback(Output('output_container_d_result16', 'children'),
+              [Input('del16' , 'value')],
+              [State('listing_id', 'value'),
+              State('reviewer_id', 'value')
+              ])
+def render_target(del16, listing_id,reviewer_id) :
+    string = "You have entered listing_id = {} and reviewer_id = {}".format(listing_id,reviewer_id)
+    return string
+
+#17
+@app.callback(Output('output_container_d_result17', 'children'),
+              [Input('del17' , 'value')],
+              [State('room_type_id', 'value')])
+def render_target(del17,room_type_id) :
+    string = "You have entered room_type_id = {}".format(room_type_id)
+    return string
+
+#18
+@app.callback(Output('output_container_d_result18', 'children'),
+              [Input('del18' , 'value')],
+              [State('host_id', 'value'),
+              State('host_verifications_id', 'value')
+              ])
+def render_target(del18,host_id,host_verifications_id) :
+    string = "You have entered amenity_id = {} and host_verifications_id = {}".format(host_id,host_verifications_id )
+    return string
+
 
 #################### End layout DELETE
 
