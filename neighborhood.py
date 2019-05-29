@@ -8,15 +8,15 @@ from dash.dependencies import Input, Output, State
 
 
 
-#external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 madrid_n =pd.read_csv('table/madrid.csv',sep=',')
-values_madrid =[i[0] for i in madrid_n.values]
+#values_madrid =[(i[0],str(i[1])) for i in madrid_n.values]
 barcelona_n =pd.read_csv('table/barcelona.csv',sep=',')
-values_barcelona=[i[0] for i in barcelona_n.values]
+#values_barcelona=[(i[0],str(i[1])) for i in barcelona_n.values]
 berlin_n =pd.read_csv('table/berlin.csv',sep=',')
-values_berlin=[i[0] for i in berlin_n.values]
+#values_berlin=[(i[0], str(i[1])) for i in berlin_n.values]
 
 location = html.Div([
 	html.Div([
@@ -43,6 +43,8 @@ location = html.Div([
 	
 ])
 
+
+app.config['suppress_callback_exceptions']=True
 @app.callback(
     Output(component_id='output_container_neighborhood', component_property='children'),
     [Input(component_id='cities_n', component_property='value')]
@@ -53,7 +55,7 @@ def render_target(val):
 		return  html.Div([
 				dcc.Dropdown(
 					id = 'madrid_neighborhood',
-					options=[{'label': i, 'value': i} for i in values_madrid],
+					options=[{'label': i[0], 'value': str(i[1])} for i in madrid_n.values],
 					value='',
 				)
 				])
@@ -61,7 +63,7 @@ def render_target(val):
 		return html.Div([
 				dcc.Dropdown(
 					id = 'barcelona_neighborhood',
-					options=[{'label': i, 'value': i} for i in values_barcelona],
+					options=[{'label': i[0], 'value': str(i[1])} for i in barcelona_n.values],
 					value='',
 				)
 				])
@@ -69,13 +71,14 @@ def render_target(val):
 		return html.Div([
 				dcc.Dropdown(
 					id = 'berlin_neighborhood',
-					options=[{'label': i, 'value': i} for i in values_berlin],
+					options=[{'label': i[0], 'value': str(i[1])} for i in berlin_n.values],
 					value='',
 				)
 				])
 		
 	
-
+def location():
+	return location
 
 
 
