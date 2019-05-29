@@ -9,6 +9,10 @@ import dash_daq as daq
 #import _mysql
 import cx_Oracle
 
+import datetime
+
+now = datetime.datetime.now()
+
 from dash.dependencies import Input, Output, State       
 from datetime import datetime as dt
 
@@ -1447,7 +1451,19 @@ def update_output(value):
             html.Div([
                 html.Label("Listing name"),
                 dcc.Input(
-                id = 'search_insert',
+                id = 'listing_insert',
+                placeholder='',
+                type='text',
+                value='',
+                size = '50'
+                )],
+            style={'marginLeft': 10, 'marginTop': 10, 'width': '100%', 'display': 'inline-block'}
+            ),
+
+            html.Div([
+                html.Label("host id"),
+                dcc.Input(
+                id = 'host_id',
                 placeholder='',
                 type='text',
                 value='',
@@ -1506,8 +1522,8 @@ def update_output(value):
                     ]),
                     dcc.DatePickerRange(
                         id='my-date-picker-range',
-                        min_date_allowed=dt(2019, 8, 5),
-                        max_date_allowed=dt(2019, 9, 19),
+                        min_date_allowed=dt(2018, 9, 7),
+                        max_date_allowed=dt(2019, 11, 8),
                         initial_visible_month=dt(2019, 8, 5),
                     )],
                 className="six columns",
@@ -1618,6 +1634,7 @@ def update_output(value):
                 html.Div([
                     html.Label("description"),
                     dcc.Textarea(
+                        id = 'description',
                         placeholder='Enter a value...',
                         value='Describe in a few words...',
                         style={'width': '100%'}
@@ -1632,10 +1649,20 @@ def update_output(value):
                 ],
                 className="six columns",
                 style={'marginLeft': 10, 'marginTop': 10, 'marginBotom' : 20, 'width': '50%', 'display': 'inline-block'}
-                )     
+                ),    
             ],
             style={'marginLeft': 10, 'marginTop': 10, 'width': '100%'}
-            )
+            ),
+
+            html.Div([
+                    html.Label(''),
+                    dcc.Textarea(
+                        id = 'result_message',
+                        placeholder='Enter a value...',
+                        value='',
+                        style={'width': '100%'}
+                    )  
+                ]) ,
         ])
 
     elif value == '2' :
@@ -1652,6 +1679,7 @@ def update_output(value):
             html.Div([
                 html.Label("Host about"),
                 dcc.Textarea(
+                    id = 'host_about',
                     placeholder='Enter a description...',
                     value='Describe in a few words...',
                     style={'width': '100%'}
@@ -1705,9 +1733,198 @@ def update_output(value):
 
     elif value == '3' :
         return html.Div([
-        html.Button('SEARCH in the database', id='button_insert')],
-        style={'marginLeft': 200, 'marginTop': 80, 'width': '100%', 'display': 'inline-block'}
-        )
+            html.Div([
+                html.Div([
+                    html.Label('Listing ID'),
+                    dcc.Input(
+                        id = 'l_id',
+                        placeholder='',
+                        type='text',
+                        value=''
+                    ),
+                ],
+                 className="six columns",
+                ),
+                html.Div([
+                    html.Label('Reviewer ID'),
+                    dcc.Input(
+                        id = 'r_id',
+                        placeholder='',
+                        type='text',
+                        value=''
+                    ),
+                ],
+                 className="six columns",
+                ),
+            ],
+            style={'marginLeft': 10, 'marginTop': 20, 'marginBotom' : 10, 'width': '100%', 'display': 'inline-block'}
+            ),
+            
+            
+            html.Div([
+                    #html.Label("Review for lisiting :  by Reviewer: "),
+                    html.Div(
+                        id='output_container_review_listing',
+                        style={'marginLeft': 10, 'marginTop': 50, 'width': '80%', 'display': 'inline-block'}
+                    ),
+                    dcc.Textarea(
+                        id = 'comment',
+                        placeholder='Enter a value...',
+                        value='',
+                        style={'width': '100%'}
+                    )  
+            ] ,
+            #className="six columns",
+            style={'marginLeft': 10, 'marginTop': 10, 'marginBotom' : 10, 'width': '80%', 'display': 'inline-block'}
+            ),
+
+            html.Div([
+                html.Button('INSERT THE REVIEW', id='button_insert_review')
+            ],
+            style={'marginLeft': 50, 'marginTop': 10, 'marginBotom' : 10, 'width': '80%', 'display': 'inline-block'}
+            ),
+
+            html.Div(
+                id = 'output_message_review',
+                style={'marginLeft': 50, 'marginTop': 10, 'marginBotom' : 10, 'width': '80%', 'display': 'inline-block'}
+           )
+        ],
+    )
+
+@app.callback(
+    Output('result_message', 'value'),
+    [Input('button_insert', 'n_clicks')],
+    [State('listing_insert', 'value'), State('host_about', 'value'), State('daily_slider', 'value'), State('weekly_slider', 'value'),
+    State('my-date-picker-range', 'start_date'), State('my-date-picker-range', 'end_date'), State('accommodates', 'values'), State('beds_number_insert', 'value'),
+    State('property_type_dropdown', 'value'), State('description', 'value')]
+    )
+
+def change(n_clicks, listing_name, host_id, daily_price, weekly_price, min_date, max_date, accomodates_set, nb_beds, property_type_id, description):
+
+    dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
+    conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
+    
+    host_check = conn.cursor()
+
+    if host_id == '' or not host_id.isdigit() : return 'Bad host_id'
+
+    host_check.execute('SELECT COUNT(*) from HOST where host_id = {}'.format(int(host_id)))
+
+    listing_max = conn.cursor()
+    listing_max.execute('SELECT MAX(listing_id) FROM LISTING')
+    listing_id = list(listing_max)[0][0] + 1
+    cancellation_policy_id = 1
+    bedtype_id = 2
+    neighborhood_id = 1
+    roomtype_id = 1
+
+    if len(list(host_check)) != 0:
+        cursor = conn.cursor()
+        string_prefix = '''INSERT INTO LISTING (LISTING_ID, LISTING_NAME, DAILY_PRICE, WEEKLY_PRICE, HOST_ID, BEDS, PROPERTY_TYPE_ID, ROOMTYPE_ID, CANCELLATION_POLICY_ID, NEIGHBORHOOD_ID, BEDTYPE_ID, DESCRIPTION)
+        VALUES ({0}, \'{1}\', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, \'{11}\')'''.format(int(listing_id), listing_name, int(daily_price), int(weekly_price), int(host_id), int(nb_beds), int(property_type_id), int(roomtype_id), int(cancellation_policy_id), int(neighborhood_id), int(bedtype_id), description)
+        cursor.execute(string_prefix)
+
+        acc_cursor = conn.cursor()
+        acc_cursor.execute('SELECT DISTINCT CA.calendar_date, CA.calendar_id FROM CALENDAR CA, RESERVED_ON RE WHERE RE.calendar_id = CA.calendar_id')
+        interm_list = [elem for sublist in [(lambda x : [x[0].strftime('%Y-%m-%d'), x[1]])(x) for x in list(acc_cursor)] for elem in sublist]
+        date_id_dict = dict(zip(interm_list[::2], interm_list[1::2]))
+        list_date_ids = [i for i in range(date_id_dict[min_date.split('')[0].strftime('%Y-%m-%d')], date_id_dict[min_date.split('')[0].strftime('%Y-%m-%d' + 1)])]
+        for j in list_date_ids:
+            inter_cursor = conn.cursor()
+            inter_cursor.execute('''INSERT INTO RESERVED_ON(LISTING_ID, CALENDAR_ID, AVAILABLE, PRICE)
+                                    VALUES ({0}, {1}, \'t\', {2}'''.format(listing_id, j, int(daily_price)))
+
+        for k in accomodates_set:
+            inter_cursor = conn.cursor()
+            inter_cursor.execute('''INSERT INTO IS_EQUIPED_WITH(LISTING_ID, AMENITY_ID)
+                                    VALUES ({0}, {1})'''.format(listing_id, k))
+
+        return 'Listing inserted with id' + listing_id
+
+    else : return 'Host id does not exist'
+"""
+@app.callback(
+    Output('result_message', 'value'),
+    [Input('button_insert', 'n_clicks')],
+    [State('host_insert', 'value'), State('host_id', 'value'), State('daily_slider', 'value'), State('weekly_slider', 'value'),
+    State('my-date-picker-range', 'start_date'), State('my-date-picker-range', 'end_date'), State('accommodates', 'values'), State('beds_number_insert', 'value'),
+    State('property_type_dropdown', 'value'), State('description', 'value')]
+    )
+
+def change(n_clicks, listing_name, host_id, daily_price, weekly_price, min_date, max_date, accomodates_set, nb_beds, property_type_id, description):
+
+    dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
+    conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
+    
+    host_check = conn.cursor()
+
+    if host_id == '' or not host_id.isdigit() : return 'Bad host_id'
+
+    host_check.execute('SELECT COUNT(*) from HOST where host_id = {}'.format(int(host_id)))
+
+    listing_max = conn.cursor()
+    listing_max.execute('SELECT MAX(listing_id) FROM LISTING')
+    listing_id = list(listing_max)[0][0] + 1
+    cancellation_policy_id = 1
+    bedtype_id = 2
+    neighborhood_id = 1
+    roomtype_id = 1
+
+    if len(list(host_check)) != 0:
+        cursor = conn.cursor()
+        string_prefix = '''INSERT INTO LISTING (LISTING_ID, LISTING_NAME, DAILY_PRICE, WEEKLY_PRICE, HOST_ID, BEDS, PROPERTY_TYPE_ID, ROOMTYPE_ID, CANCELLATION_POLICY_ID, NEIGHBORHOOD_ID, BEDTYPE_ID, DESCRIPTION)
+        VALUES ({0}, \'{1}\', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, \'{11}\')'''.format(int(listing_id), listing_name, int(daily_price), int(weekly_price), int(host_id), int(nb_beds), int(property_type_id), int(roomtype_id), int(cancellation_policy_id), int(neighborhood_id), int(bedtype_id), description)
+        cursor.execute(string_prefix)
+
+        acc_cursor = conn.cursor()
+        acc_cursor.execute('SELECT DISTINCT CA.calendar_date, CA.calendar_id FROM CALENDAR CA, RESERVED_ON RE WHERE RE.calendar_id = CA.calendar_id')
+        interm_list = [elem for sublist in [(lambda x : [x[0].strftime('%Y-%m-%d'), x[1]])(x) for x in list(acc_cursor)] for elem in sublist]
+        date_id_dict = dict(zip(interm_list[::2], interm_list[1::2]))
+        list_date_ids = [i for i in range(date_id_dict[min_date.split('')[0].strftime('%Y-%m-%d')], date_id_dict[min_date.split('')[0].strftime('%Y-%m-%d' + 1)])]
+        for j in list_date_ids:
+            inter_cursor = conn.cursor()
+            inter_cursor.execute('''INSERT INTO RESERVED_ON(LISTING_ID, CALENDAR_ID, AVAILABLE, PRICE)
+                                    VALUES ({0}, {1}, \'t\', {2}'''.format(listing_id, j, int(daily_price)))
+
+        for k in accomodates_set:
+            inter_cursor = conn.cursor()
+            inter_cursor.execute('''INSERT INTO IS_EQUIPED_WITH(LISTING_ID, AMENITY_ID)
+                                    VALUES ({0}, {1})'''.format(listing_id, k))
+
+        return 'Listing inserted with id' + listing_id
+
+    else : return 'Host id does not exist'
+    """
+
+@app.callback(Output('output_container_review_listing', 'children'),
+              [Input('l_id', 'value'),
+              Input('r_id', 'value')]) 
+def render_content(l_id,r_id) :
+    string = 'Review for the listing : {} \n by reviewer {}'.format(l_id,r_id)
+    return string
+
+@app.callback(Output('output_message_review', 'children'),
+              [Input('button_insert_review', 'n_clicks')],
+              [State('l_id', 'value'),
+              State('r_id', 'value'), State('comment', 'value')]) 
+
+def insert_review(n_clicks,l_id, r_id, comment) :
+
+    if len(l_id) == 0 and len(r_id) == 0 and not l_id.isdigit() and not r_id.isdigit(): return '' 
+    
+    dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
+    conn = cx_Oracle.connect(user=r'C##DB2019_G04', password='DB2019_G04', dsn=dsn_tns)
+    #try:
+    cursor = conn.cursor()
+    cursor.execute('''INSERT INTO REVIEWS(LISTING_ID, REVIEWER_ID, REVIEW_DATE, COMMENTS)
+                    VALUES({0}, {1}, date \'{2}\', \'{3}\')'''.format(int(l_id), int(r_id), now.strftime("%Y-%m-%d"), comment))
+
+    conn.commit()
+
+    return 'Review inserted with comment  : \'{}\''.format(comment)
+    #except:
+
+    #return l_id
 
 '''
 html.Div([

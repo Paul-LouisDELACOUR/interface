@@ -5,11 +5,8 @@ import dash_core_components as dcc
 import numpy as np
 import pandas as pd
 from dash.dependencies import Input, Output, State 
-
-
-
-#external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 madrid_n =pd.read_csv('table/madrid.csv',sep=',')
 values_madrid =[i[0] for i in madrid_n.values]
@@ -43,6 +40,8 @@ location = html.Div([
 	
 ])
 
+def location() : return location
+app.config['suppress_callback_exceptions']=True
 @app.callback(
     Output(component_id='output_container_neighborhood', component_property='children'),
     [Input(component_id='cities_n', component_property='value')]
