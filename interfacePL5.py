@@ -315,7 +315,17 @@ layout_predefinied = html.Div([
                 {'label': 'Q9', 'value': '9'},
                 {'label': 'Q10', 'value': '10'},
                 {'label': 'Q11', 'value': '11'},
-                {'label': 'Q12', 'value': '12'}
+                {'label': 'Q12', 'value': '12'},
+                {'label': 'Q13', 'value': '13'},
+                {'label': 'Q14', 'value': '14'},
+                {'label': 'Q15', 'value': '15'},
+                {'label': 'Q16', 'value': '16'},
+                {'label': 'Q17', 'value': '17'},
+                {'label': 'Q18', 'value': '18'},
+                {'label': 'Q19', 'value': '19'},
+                {'label': 'Q20', 'value': '20'},
+                {'label': 'Q21', 'value': '21'},
+                {'label': 'Q22', 'value': '22'}
             ],
             value='1'
         )
@@ -787,6 +797,177 @@ def update_output(value):
                 )
 
             ])
+    #Query 1
+    elif value == '13' : 
+        return html.Div([
+            html.Div(
+                '''
+                 What is the average price for a listing with 8 bedrooms?
+                '''
+            ),
+            html.Div([
+                html.Button('SEARCH', id='search_13')],
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id = 'output_container_q13',
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            )
+        ])
+    #Query 2
+    elif value == '14' :
+        return html.Div([
+            html.Div(
+                '''
+                 What is the average cleaning review score for listings with TV?
+                '''
+            ),
+            html.Div([
+                html.Button('SEARCH', id='search_14')],
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id = 'output_container_q14',
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            )
+        ])
+    #Query 3
+    elif value == '15' :
+        return html.Div([
+            html.Div(
+                '''
+                 Print all the hosts who have an available property between date 03.2019 and 09.2019.
+                '''
+            ),
+            html.Div([
+                html.Button('SEARCH', id='search_15')],
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id = 'output_container_q15',
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            )
+        ])
+    #Query 4
+    elif value == '16' :
+        return html.Div([
+            html.Div(
+                '''
+                Print how many listing items exist that are posted by two different hosts but the hosts have the same name.
+                '''
+            ),
+            html.Div([
+                html.Button('SEARCH', id='search_16')],
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id = 'output_container_q16',
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            )
+        ])
+    #Query 5
+    elif value == '17' :
+        return html.Div([
+            html.Div(
+                '''
+                 Print all the dates that 'Viajes Eco’ has available accommodations for rent.
+                '''
+            ),
+            html.Div([
+                html.Button('SEARCH', id='search_17')],
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id = 'output_container_q17',
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            )
+        ])
+    #Query 6
+    elif value == '18' :
+        return html.Div([
+            html.Div(
+                '''
+                Find all the hosts (host_ids, host_names) that have only one listing.
+                '''
+            ),
+            html.Div([
+                html.Button('SEARCH', id='search_18')],
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id = 'output_container_q18',
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            )
+        ])
+    #Query 7
+    elif value == '19' :
+        return html.Div([
+            html.Div(
+                '''
+                What is the difference in the average price of listings with and without Wifi.
+                '''
+            ),
+            html.Div([
+                html.Button('SEARCH', id='search_19')],
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id = 'output_container_q19',
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            )
+        ])
+    #Query 8
+    elif value == '20' :
+        return html.Div([
+            html.Div(
+                '''
+                 How much more (or less) costly to rent a room with 8 beds in Berlin compared to Madrid on average?
+                '''
+            ),
+            html.Div([
+                html.Button('SEARCH', id='search_20')],
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id = 'output_container_q20',
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            )
+        ])
+    #Query 9
+    elif value == '21' :
+        return html.Div([
+            html.Div(
+                '''
+                 Find the top-10 (in terms of the number of listings) hosts (host_ids, host_names) in Spain
+                '''
+            ),
+            html.Div([
+                html.Button('SEARCH', id='search_21')],
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id = 'output_container_q21',
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            )
+        ])
+    #Query 10
+    elif value == '22' :
+        return html.Div([
+            html.Div(
+                '''
+               Find the top-10 rated (review_score_rating) apartments (id,name) in Barcelona.
+                '''
+            ),
+            html.Div([
+                html.Button('SEARCH', id='search_22')],
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            ),
+            html.Div(
+                id = 'output_container_q22',
+                style={'marginLeft': 10, 'marginTop': 20, 'width': '100%', 'display': 'inline-block'}
+            )
+        ])
+
 
 
 ############## Q1
@@ -1400,6 +1581,168 @@ WHERE up.neighborhood_id = down.neighborhood_id AND up.count1 >= 0.05 * down.cou
         
     #return html.Div([string_prefix + date_string])
     return df.to_dict('records'), columns
+
+##Q13
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_q13', 'children'),
+    [Input('search_13', 'n_clicks')],
+    )
+def render_target(search):
+    string = "SELECT L.listing_id, L.listing_name FROM LISTING_2 L ORDER BY L.review_scores_rating FETCH FIRST 10 ROWS ONLY;"
+
+##Q14
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_q14', 'children'),
+    [Input('search_14', 'n_clicks')],
+    )
+def render_target(search):
+    string = "SELECT AVG(L.review_scores_cleanliness) FROM LISTING_2 L, IS_EQUIPED_WITH I, AMENITY_EQUIPMENT A WHERE I.listing_id = L.listing_id AND I.amenity_id = A.amenity_id AND A.amenity_name = ‘TV’"
+  
+##Q15
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_q15', 'children'),
+    [Input('search_15', 'n_clicks')],
+    )
+def render_target(search):
+    string = 
+    '''
+    SELECT DISTINCT H.host_id FROM LISTING_2 L, HOST H WHERE L.listing_id = H.host_id
+    AND (SELECT COUNT (*)
+    FROM LISTING_2 L2, RESERVED_ON R, CALENDAR C WHERE L2.listing_id = L2.listing_id
+    AND R.available = 1
+    AND C.calendar_id = R.calendar_id
+    AND L2.listing_id = R.listing_id
+    AND C.calendar_date >= date '2018-03-01’ AND C.calendar_date <= date '2018-09-30’) =
+    (SELECT COUNT (C2.calendar_id)
+    FROM CALENDAR C2
+    WHERE C2.calendar_date >= date '2018-03-01’
+    AND C2.calendar_date <= date '2018-09-30’);
+    '''
+
+##Q16
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_q16', 'children'),
+    [Input('search_16', 'n_clicks')],
+    )
+def render_target(search):
+    string = 
+    '''
+    CREATE TABLE pair_host as SELECT H1.host_id as h1_host_id,
+    H2.host_id as h2_host_id FROM Host H1, Host H2
+    WHERE H1.host_name = H2.host_name AND H1.host_id != H2.host_id;
+    SELECT count(*)
+    FROM pair_host P
+    WHERE EXISTS(select * from listing_2 L
+    where L.host_id = P.h1_host_id) AND EXISTS(select * from listing_2 L
+    where L.host_id = P.h2_host_id);
+    '''
+
+##Q17
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_q17', 'children'),
+    [Input('search_17', 'n_clicks')],
+    )
+def render_target(search):
+    string = 
+    '''
+    SELECT DISTINCT R.calendar_date
+    FROM (SELECT L.listing_id, L.listing_name
+    FROM Listing_2 L, (SELECT H.host_id
+    FROM Host H
+    WHERE H.host_name = 'VIAJESECO’ )H
+    WHERE L.host_id = H.host_id) L, (SELECT *
+    FROM Reserved_on R, Calendar C
+    WHERE R.available = 'T' AND C.calendar_id = R.calendar_id) R WHERE L.listing_id = R.listing_id;
+    '''
+    
+##Q18
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_q18', 'children'),
+    [Input('search_18', 'n_clicks')],
+    )
+def render_target(search):
+    string = 
+    '''
+    SELECT H.host_id, H.host_name FROM Host H
+    WHERE (SELECT count(*)
+    FROM Listing L
+    WHERE L.host_id = H.host_id ) = 1
+    '''
+
+##Q19
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_q19', 'children'),
+    [Input('search_19', 'n_clicks')],
+    )
+def render_target(search):
+    string = 
+    '''
+    SELECT (SELECT AVG(L1.daily_price)
+    FROM Listing_2 L1, Amenity_equipment A1, is_Equiped_with_2 I1 Where I1.listing_id = L1.listing_id
+    AND I1.amenity_id = A1.amenity_id AND A1.amenity_name= 'Wifi’)- (SELECT AVG(L2.daily_price)
+    FROM Listing_2 L2
+    WHERE NOT EXISTS (SELECT *
+    FROM AMENITY_EQUIPMENT A, IS_EQUIPED_WITH_2 I WHERE I.listing_id = L2.listing_id
+    AND A.amenity_id = I.amenity_id
+    AND A.amenity_name = 'Wifi')) AS SUBSTRACTION
+    FROM LISTING FETCH FIRST 1 ROWS ONLY;
+    '''
+  
+##Q20
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_q20', 'children'),
+    [Input('search_20', 'n_clicks')],
+    )
+def render_target(search):
+    string = 
+    '''
+    SELECT (SELECT AVG(L.daily_price) FROM L_8_beds L,
+    NEIGHBOURHOOD N,
+    (SELECT * FROM CITY C1 WHERE C1.city_name = 'BERLIN' )C1 WHERE L.neighbourhood_id = N.neighbourhood_id
+    AND N.city_id = C1.city_id )- (SELECT AVG(L.daily_price)
+    FROM L_8_beds L,
+    NEIGHBOURHOOD N,
+    (SELECT * FROM CITY C1 WHERE C1.city_name = 'MADRID' ) C1
+    WHERE L.neighbourhood_id = N.neighbourhood_id AND N.city_id = C1.city_id) AS DIFFERENCE
+    FROM LISTING FETCH FIRST 1 ROWS ONLY;
+    '''
+  
+##Q21
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_q21', 'children'),
+    [Input('search_21', 'n_clicks')],
+    )
+def render_target(search):
+    string = 
+    '''
+    SELECT H.host_id, H.host_name FROM (SELECT L.host_id
+    FROM LISTING L GROUP BY L.host_id
+    ORDER BY COUNT(listing_id) FETCH FIRST 10 ROWS ONLY) J, HOST H WHERE J.host_id = H.host_id;
+    '''
+  
+##Q22
+app.config['suppress_callback_exceptions']=True
+@app.callback(
+    Output('output_container_q22', 'children'),
+    [Input('search_22', 'n_clicks')],
+    )
+def render_target(search):
+    string = 
+    '''
+    SELECT L.listing_id, L.listing_name
+    FROM LISTING_2 L
+    ORDER BY L.review_scores_rating FETCH FIRST 10 ROWS ONLY;
+    '''
+  
 
 ####################### End of predefinied queries
 
